@@ -9,7 +9,7 @@ https://github.com/styvesg/nsd_gnet8x
 
 
 
-CHANGES FROM ORIGINAL CODE
+EDITS OF ORIGINAL CODE
 
 1. The classes in "torch_gnet.py" are modified such that the Encoder returns the pre-filter feature maps too, so that the FWRF models can use these features too to predict brain data.
 
