@@ -8,14 +8,14 @@ from tqdm import tqdm
 import pickle
 import math
 
-import src_new.numpy_utility as pnu
+import ned.models.fwrf.numpy_utility as pnu
 
 import torch
 import torch.nn as nn
 import torch.nn.init as I
 import torch.nn.functional as F
 import torch.optim as optim
-from src_new.numpy_utility import iterate_range
+from ned.models.fwrf.numpy_utility import iterate_range
 
 def get_value(_x):
     return np.copy(_x.data.cpu().numpy())

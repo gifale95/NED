@@ -7,7 +7,7 @@ from tqdm import tqdm
 import math
 
 import numpy as np
-import src_new.numpy_utility as pnu
+import ned.models.fwrf.numpy_utility as pnu
 
 import torch as T
 import torch.nn as L
