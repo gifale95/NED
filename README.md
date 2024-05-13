@@ -6,31 +6,25 @@ The Neural Encoding Dataset also comes with pre-generated synthetic fMRI and EEG
 
 For additional information on the Neural Encoding Dataset you can check out the [website][ned_website].
 
-!!!!!!!!!!!!!!!!!!!!!!!! Use emojis for titles !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 
+## 🔧 Installation
 
-## Installation !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+To install ```NED``` run the following command on your terminal:
 
-To run the code first install [Anaconda][conda], then create and activate a dedicated Conda environment by typing the following into your terminal:
 ```shell
-curl -O https://raw.githubusercontent.com/gifale95/eeg_encoding_model/main/environment.yml
-conda env create -f environment.yml
-conda activate eeg_encoding
-```
-Alternatively, after installing Anaconda you can download the [environment.yml][env_file] file, open the terminal in the download directory and type:
-```shell
-conda env create -f environment.yml
-conda activate eeg_encoding
+pip install -U git+https://github.com/gifale95/NED.git
 ```
 
+You will additionally need to install the Python dependencies found in [requirements.txt][requirements].
 
 
-## Documentation / How to use !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-The NED toolbox requires you to prior download the neural encoding dataset at ... You don't need to download all of it, but only the parts you fnd necessary.
+## 📃 How to use !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-Link to NED data manual.
+To use ```NED``` you first need to download the Neural Encoding Dataset from [here][ned_data].
+
+You don't need to download all of it, but only the parts you fnd necessary. Link to NED data manual.
 
 Small example of utility functions (see frrsa & ncsnr repos)
 
@@ -38,7 +32,7 @@ Provide list of available modalities, training datasets, models.
 
 
 
-## Tutorials !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+## 💻 Tutorials !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! --> Maybe merge with "How to use", and add link to tutorials after each function.
 
 Tutorials ("tutorials" folder, add colab tutorials there in jupyter notebook format, and say that the tutorial are also available on Colab):
 
@@ -54,7 +48,7 @@ If you come across problems or have suggestions please submit an issue!
 
 
 
-## Citation
+## 📜 Citation
 
 If you use the Neural Encoding Dataset, please cite the following paper:
 
@@ -68,4 +62,5 @@ If you use the Neural Encoding Dataset, please cite the following paper:
 [hebart]: https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0223792
 [nsd]: https://naturalscenesdataset.org/
 [allen]: https://www.nature.com/articles/s41593-021-00962-x
-
+[requirements]: https://github.com/gifale95/NED/blob/main/requirements.txt
+[ned_data]: https://drive.google.com/drive/folders/1flyZw95cZGBTbePByWUKN6JQz1j1HoYh?usp=drive_link
