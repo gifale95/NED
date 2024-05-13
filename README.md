@@ -8,6 +8,12 @@ For additional information on the Neural Encoding Dataset you can check out the 
 
 
 
+## 🤝 Help the Neural Encoding Dataset Expand
+
+Do you have encoding models with higher prediction accuracies than the ones currently available in the Neural Encoding Dataset, and would like to make them available to the community? Or maybe you have encoding models for new neural datasets, data modalities (e.g., MEG/ECoG/animal), or stimulus types (e.g., videos, language) that you would like to share? Or perhaps you have suggestions for improving the Neural Encoding Dataset? Then please get in touch vith Ale (alessandro.gifford@gmail.com): all feedback and help is strongly appreciated!
+
+
+
 ## 🔧 Installation
 
 To install ```NED``` run the following command on your terminal:
@@ -55,7 +61,7 @@ The folder [```../NED/ned_creation_code/```][ned_creation_code] contains the cod
 
 ## ❗ Issues
 
-If you come across problems or have suggestions please submit an issue!
+If you come across problems with the toolbox, please submit an issue!
 
 
 
