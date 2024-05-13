@@ -1,36 +1,17 @@
-# Table of Contents
+# NED
 
+The ```NED``` toolbox provides utility functions and tutorials for using the [**Neural Encoding Dataset**][ned_website]: trained encoding models of fMRI and EEG responses to images of multiple subjects, which you can use to synthesize fMRI and EEG responses to any image of your choice.
 
+The Neural Encoding Dataset also comes with pre-generated synthetic fMRI and EEG responses for ~150,000 naturalistic images coming from the [ImageNet 2012 Challenge][imagenet] ([*Russakovsky et al., 2015*][russakovsky]), the [THINGS database][things] ([*Hebart et al., 2019*][hebart]), and the [Natural Scenes Dataset][nsd] ([*Allen et al., 2022*][allen]).
 
-!!!!!!!!!!!!!!!!!!!!!!!! Add back to top buttons in each section !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+For additional information on the Neural Encoding Dataset you can check out the [website][ned_website].
 
 !!!!!!!!!!!!!!!!!!!!!!!! Use emojis for titles !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 
-## The Neural Encoding Dataset
 
+## Installation !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-
-
-## The ned package
-
-The ```ned``` package facilitates you in using the Neural Encoding Dataset (NED) for your research. 
-
-This repository provides utility functions and tutorials for 
-
-Here we provide the code to reproduce the results of our data resource paper:</br>
-"[A large and rich EEG dataset for modeling human visual object recognition][paper_link]".</br>
-Alessandro T. Gifford, Kshitij Dwivedi, Gemma Roig, Radoslaw M. Cichy
-
-If you experience problems with the code, please create a pull request or report the bug directly to Ale via email (alessandro.gifford@gmail.com).
-
-Please visit the [dataset page][dataset_page] for the data, paper, dataset tutorial and more.
-
-[Here][videos] you will find some useful videos on our EEG dataset.
-
-
-
-## Installation
 To run the code first install [Anaconda][conda], then create and activate a dedicated Conda environment by typing the following into your terminal:
 ```shell
 curl -O https://raw.githubusercontent.com/gifale95/eeg_encoding_model/main/environment.yml
@@ -45,35 +26,46 @@ conda activate eeg_encoding
 
 
 
-## Documentation
-* **01_eeg_preprocessing:** preprocess the raw EEG data.
-* **02_dnn_feature_maps_extraction:** extract the feature maps of all images using four DNN architectures (AlexNet, ResNet-50, CORnet-S, MoCo), and downsample them using principal component analysis (PCA).
-* **03_synthesizing_eeg_data:** synthesize the EEG responses to images through linearizing and end-to-end encoding models.
-* **04_synthetic_data_analyses:** perform the correlation, pairwise decoding and zero-shot identification analyses on the synthetic EEG data.
-* **05_plotting:** plot the analyses results.
+## Documentation / How to use !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+The NED toolbox requires you to prior download the neural encoding dataset at ... You don't need to download all of it, but only the parts you fnd necessary.
+
+Link to NED data manual.
+
+Small example of utility functions (see frrsa & ncsnr repos)
+
+Provide list of available modalities, training datasets, models.
 
 
 
-## Tutorials
+## Tutorials !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+Tutorials ("tutorials" folder, add colab tutorials there in jupyter notebook format, and say that the tutorial are also available on Colab):
+
 [Here][colab] you will find a Colab interactive tutorial on how to load and visualize the preprocessed EEG data and the corresponding stimuli images.
 
 [colab]: https://colab.research.google.com/drive/1i1IKeP4cK3ViscP4b4kNOVo4kRoL8tf6?usp=sharing
 
 
-## License
+
+## ❗ Issues
+
+If you come across problems or have suggestions please submit an issue!
+
 
 
 ## Citation
+
 If you use the Neural Encoding Dataset, please cite the following paper:
 
-Gifford AT, Dwivedi K, Roig G, Cichy RM. 2022. A large and rich EEG dataset for modeling human visual object recognition. _NeuroImage_, 264:119754. DOI: [https://doi.org/10.1016/j.neuroimage.2022.119754][paper_link]
+*Gifford AT, Cichy RM. 2024. In preparation.*
 
 
+[ned_website]: https://www.alegifford.com/projects/ned/
+[imagenet]: https://www.image-net.org/challenges/LSVRC/2012/index.php
+[russakovsky]: https://link.springer.com/article/10.1007/s11263-015-0816-y
+[things]: https://things-initiative.org/
+[hebart]: https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0223792
+[nsd]: https://naturalscenesdataset.org/
+[allen]: https://www.nature.com/articles/s41593-021-00962-x
 
-[dataset_page]: https://www.alegifford.com/publications/eeg_dataset/
-[videos]: https://www.youtube.com/playlist?list=PLAkLSNuCebPPv_S3gTjYIFvQ82hyezIld
-[paper_link]: https://doi.org/10.1016/j.neuroimage.2022.119754
-[conda]: https://www.anaconda.com/
-[env_file]: https://github.com/gifale95/eeg_encoding_model/blob/main/environment.yml
-[osf]: https://osf.io/3jk45/
-[imagenet]: https://www.image-net.org/download.php
