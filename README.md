@@ -1,4 +1,22 @@
-# Building and evaluating encoding models of EEG visual responses using DNNs
+# Table of Contents
+
+
+
+!!!!!!!!!!!!!!!!!!!!!!!! Add back to top buttons in each section !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+!!!!!!!!!!!!!!!!!!!!!!!! Use emojis for titles !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+## The Neural Encoding Dataset
+
+
+
+
+## The ned package
+
+The ```ned``` package facilitates you in using the Neural Encoding Dataset (NED) for your research. 
+
+This repository provides utility functions and tutorials for 
 
 Here we provide the code to reproduce the results of our data resource paper:</br>
 "[A large and rich EEG dataset for modeling human visual object recognition][paper_link]".</br>
@@ -12,7 +30,7 @@ Please visit the [dataset page][dataset_page] for the data, paper, dataset tutor
 
 
 
-## Environment setup
+## Installation
 To run the code first install [Anaconda][conda], then create and activate a dedicated Conda environment by typing the following into your terminal:
 ```shell
 curl -O https://raw.githubusercontent.com/gifale95/eeg_encoding_model/main/environment.yml
@@ -26,17 +44,8 @@ conda activate eeg_encoding
 ```
 
 
-## Data availability
-The raw and preprocessed EEG dataset, the training and test images and the DNN feature maps are available on [OSF][osf]. The ILSVRC-2012 validation and test images can be found on [ImageNet][imagenet]. To run the code, the data must be downloaded and placed into the following directories:
 
-* **Raw EEG data:** `../project_directory/eeg_dataset/raw_data/`.
-* **Preprocessed EEG data:** `../project_directory/eeg_dataset/preprocessed_data/`.
-* **Training and test images; ILSVRC-2012 validation and test images:** `../project_directory/image_set/`.
-* **DNN feature maps:** `../project_directory/dnn_feature_maps/pca_feature_maps`.
-
-
-
-## Code description
+## Documentation
 * **01_eeg_preprocessing:** preprocess the raw EEG data.
 * **02_dnn_feature_maps_extraction:** extract the feature maps of all images using four DNN architectures (AlexNet, ResNet-50, CORnet-S, MoCo), and downsample them using principal component analysis (PCA).
 * **03_synthesizing_eeg_data:** synthesize the EEG responses to images through linearizing and end-to-end encoding models.
@@ -45,17 +54,20 @@ The raw and preprocessed EEG dataset, the training and test images and the DNN f
 
 
 
-## Interactive dataset tutorial
+## Tutorials
 [Here][colab] you will find a Colab interactive tutorial on how to load and visualize the preprocessed EEG data and the corresponding stimuli images.
 
 [colab]: https://colab.research.google.com/drive/1i1IKeP4cK3ViscP4b4kNOVo4kRoL8tf6?usp=sharing
 
 
+## License
 
-## Cite
-If you use any of our data or code, partly or as it is, please cite our paper:
+
+## Citation
+If you use the Neural Encoding Dataset, please cite the following paper:
 
 Gifford AT, Dwivedi K, Roig G, Cichy RM. 2022. A large and rich EEG dataset for modeling human visual object recognition. _NeuroImage_, 264:119754. DOI: [https://doi.org/10.1016/j.neuroimage.2022.119754][paper_link]
+
 
 
 [dataset_page]: https://www.alegifford.com/publications/eeg_dataset/
