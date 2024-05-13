@@ -42,6 +42,17 @@ Tutorials ("tutorials" folder, add colab tutorials there in jupyter notebook for
 
 
 
+## 🛠️ Neural Encoding Dataset Creation Code
+
+The folder [```../NED/ned_creation_code/```][ned_creation_code] contains the code used to create the Neural Encoding Dataset, divided in the following sub-folders:
+
+> * [```../00_prepare_data/```][prepare_data]: prepare the data (i.e., images and corresponding neural responses) used to train the encoding models.
+* [```../01_train_encoding_models/```][train_encoding]: train the encoding models, and save their weights.
+* [```../02_test_encoding_models/```][test_encoding]: test the encoding models (i.e., compute and plot their encoding accuracy).
+* [```../03_synthesize_neural_responses/```][synthesize]: use the trained encoding models to synthesize neural responses for ~150,000 naturalistic images.
+
+
+
 ## ❗ Issues
 
 If you come across problems or have suggestions please submit an issue!
@@ -52,7 +63,7 @@ If you come across problems or have suggestions please submit an issue!
 
 If you use the Neural Encoding Dataset, please cite the following paper:
 
-*Gifford AT, Cichy RM. 2024. In preparation.*
+> *Gifford AT, Cichy RM. 2024. In preparation.*
 
 
 [ned_website]: https://www.alegifford.com/projects/ned/
@@ -64,3 +75,13 @@ If you use the Neural Encoding Dataset, please cite the following paper:
 [allen]: https://www.nature.com/articles/s41593-021-00962-x
 [requirements]: https://github.com/gifale95/NED/blob/main/requirements.txt
 [ned_data]: https://drive.google.com/drive/folders/1flyZw95cZGBTbePByWUKN6JQz1j1HoYh?usp=drive_link
+[ned_creation_code]: https://github.com/gifale95/NED/tree/main/ned_creation_code/
+[prepare_data]: https://github.com/gifale95/NED/tree/main/ned_creation_code/00_prepare_data
+[train_encoding]: https://github.com/gifale95/NED/tree/main/ned_creation_code/01_train_encoding_models
+[test_encoding]: https://github.com/gifale95/NED/tree/main/ned_creation_code/02_test_encoding_models
+[synthesize]: https://github.com/gifale95/NED/tree/main/ned_creation_code/03_synthesize_neural_responses
+
+
+
+
+
