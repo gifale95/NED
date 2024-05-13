@@ -47,9 +47,9 @@ Tutorials ("tutorials" folder, add colab tutorials there in jupyter notebook for
 The folder [```../NED/ned_creation_code/```][ned_creation_code] contains the code used to create the Neural Encoding Dataset, divided in the following sub-folders:
 
 > * [```../00_prepare_data/```][prepare_data]: prepare the data (i.e., images and corresponding neural responses) used to train the encoding models.
-* [```../01_train_encoding_models/```][train_encoding]: train the encoding models, and save their weights.
-* [```../02_test_encoding_models/```][test_encoding]: test the encoding models (i.e., compute and plot their encoding accuracy).
-* [```../03_synthesize_neural_responses/```][synthesize]: use the trained encoding models to synthesize neural responses for ~150,000 naturalistic images.
+> * [```../01_train_encoding_models/```][train_encoding]: train the encoding models, and save their weights.
+> * [```../02_test_encoding_models/```][test_encoding]: test the encoding models (i.e., compute and plot their encoding accuracy).
+> * [```../03_synthesize_neural_responses/```][synthesize]: use the trained encoding models to synthesize neural responses for ~150,000 naturalistic images.
 
 
 
