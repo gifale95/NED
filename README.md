@@ -28,9 +28,7 @@ You will additionally need to install the Python dependencies found in [requirem
 
 ## 📃 How to use !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-To use ```NED``` you first need to download the Neural Encoding Dataset from [here][ned_data].
-
-You don't need to download all of it, but only the parts you fnd necessary. Link to NED data manual.
+To use ```NED``` you first need to download the Neural Encoding Dataset from [here][ned_data]. Depending on how you want to use the Neural Encoding Dataset, you might not need to download all of it. For this please see the [data manual][data_manual], which describes how the Neural Encoding Dataset is structured.
 
 Small example of utility functions (see frrsa & ncsnr repos)
 
@@ -38,17 +36,15 @@ Provide list of available modalities, training datasets, models.
 
 
 
-## 💻 Tutorials !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! --> Maybe merge with "How to use", and add link to tutorials after each function.
+## 💻 Tutorials
 
-Tutorials ("tutorials" folder, add colab tutorials there in jupyter notebook format, and say that the tutorial are also available on Colab):
+To familiarize with ```NED``` we created tutorials for both fMRI and EEG modalities. In these tutorial you will learn how to use ```NED```'s functions to synthesize fMRI and EEG responses for new images, as well as using the pre-generated synthetic fMRI and EEG responses for ~150,000 naturalistic images.
 
-[Here][colab] you will find a Colab interactive tutorial on how to load and visualize the preprocessed EEG data and the corresponding stimuli images.
-
-[colab]: https://colab.research.google.com/drive/1i1IKeP4cK3ViscP4b4kNOVo4kRoL8tf6?usp=sharing
+These tutorials are available on either [Colab][colab] or [Jupyter Notebook][jupyter].
 
 
 
-## 🛠️ Neural Encoding Dataset Creation Code
+## 📦 Neural Encoding Dataset Creation Code
 
 The folder [```../NED/ned_creation_code/```][ned_creation_code] contains the code used to create the Neural Encoding Dataset, divided in the following sub-folders:
 
@@ -82,6 +78,9 @@ If you use the Neural Encoding Dataset, please cite the following paper:
 [allen]: https://www.nature.com/articles/s41593-021-00962-x
 [requirements]: https://github.com/gifale95/NED/blob/main/requirements.txt
 [ned_data]: https://drive.google.com/drive/folders/1flyZw95cZGBTbePByWUKN6JQz1j1HoYh?usp=drive_link
+[data_manual]: https://docs.google.com/document/d/1DeQwjq96pTkPEnqv7V6q9g_NTHCjc6aYr6y3wPlwgDE/edit?usp=drive_link
+[colab]: https://drive.google.com/drive/folders/13aTI5eSK4yDosi63OfsyN20fLo6T5uNj?usp=drive_link
+[jupyter]: https://github.com/gifale95/NED/tree/main/tutorials
 [ned_creation_code]: https://github.com/gifale95/NED/tree/main/ned_creation_code/
 [prepare_data]: https://github.com/gifale95/NED/tree/main/ned_creation_code/00_prepare_data
 [train_encoding]: https://github.com/gifale95/NED/tree/main/ned_creation_code/01_train_encoding_models
