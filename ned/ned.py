@@ -3,10 +3,8 @@ import numpy as np
 import h5py
 import torch
 
-from ned.utils import synthesize_fmri_responses
-from ned.utils import synthesize_eeg_responses
-from ned.utils import get_fmri_metadata
-from ned.utils import get_eeg_metadata
+from ned.utils import fmri_nsd_fwrf
+from ned.utils import eeg_things_eeg_2_vit_b_32
 
 
 class NED():
@@ -204,11 +202,11 @@ class NED():
 		return rois
 
 
-	def encode_fmri(self, images, train_dataset, subject, roi, model,
+	def encode(self, images, modality, train_dataset, model, subject, roi=None,
 		return_metadata=True, device='auto'):
 		"""
-		Synthesize fMRI responses for arbitrary stimulus images, and optionally
-		return the synthetic fMRI metadata.
+		Synthesize neural responses for arbitrary stimulus images, and
+		optionally return the synthetic fMRI metadata.
 
 		Parameters
 		----------
@@ -217,29 +215,33 @@ class NED():
 			numpy array of shape (Batch size x 3 RGB Channels x Width x Height)
 			consisting of integer values in the range 0/255. Furthermore, the
 			images must be of square size (i.e., equal width and height).
+		modality : str
+			Neural data modality.
 		train_dataset : str
 			Name of the neural dataset used to train the encoding models.
-		subject : int
-			Subject number for which the fMRI image responses are synthesized.
-		roi : str
-			Name of the Region of Interest (ROI) for which the fMRI image
-			responses are synthesized.
 		model : str
-			Encoding model type used to synthesize the fMRI responses.
+			Encoding model type used to synthesize the neural responses.
+		subject : int
+			Subject number for which the neural responses are synthesized.
+		roi : str
+			Only required if modality=='fmri'. Name of the Region of Interest
+			(ROI) for which the fMRI image responses are synthesized.
 		return_metadata : bool
-			If True, return fMRI medatata along with the synthetic fMRI
-			responses.
+			If True, return medatata along with the synthetic neural responses.
 		device : str
 			Whether to work on the 'cpu' or 'cuda'. If 'auto', the code will
 			use GPU if available, and otherwise CPU.
 
 		Returns
 		-------
-		synthetic_fmri_responses : float
-			Synthetic fMRI responses for the input stimulus images, of shape:
+		synthetic_neural_responses : float
+			Synthetic neural responses for the input stimulus images.
+			If modality=='fmri', the neural response will be of shape:
 			(Images x N ROI Voxels).
-		synthetic_fmri_metadata : dict
-			Synthetic fMRI responses metadata.
+			If modality=='eeg', the neural response will be of shape:
+			(Images x Repetitions x EEG Channels x EEG time points) if
+		metadata : dict
+			Synthetic neural responses metadata.
 		"""
 
 		### Check input ###
@@ -253,33 +255,41 @@ class NED():
 		if images.shape[2] != images.shape[3]:
 			raise ValueError("'images' must be squared (i.e., equal width and height)!")
 
+		# modality
+		if type(modality) != str:
+			raise TypeError("'modality' must be of type str!")
+		modalities = self.which_modalities()
+		if modality not in modalities:
+			raise ValueError(f"'modality' value must be one of the following: {modalities}!")
+
 		# train_dataset
 		if type(train_dataset) != str:
 			raise TypeError("'train_dataset' must be of type str!")
-		train_dataset_options = self.which_train_datasets('fmri')
+		train_dataset_options = self.which_train_datasets(modality)
 		if train_dataset not in train_dataset_options:
 			raise ValueError(f"'train_dataset' value must be one of the following: {train_dataset_options}!")
+
+		# model
+		if type(model) != str:
+			raise TypeError("'model' must be of type str!")
+		models = self.which_models(modality, train_dataset)
+		if model not in models:
+			raise ValueError(f"'model' value must be one of the following: {models}!")
 
 		# subject
 		if type(subject) != int:
 			raise TypeError("'subject' must be of type int!")
-		subjects = self.which_subjects('fmri', train_dataset)
+		subjects = self.which_subjects(modality, train_dataset)
 		if subject not in subjects:
 			raise ValueError(f"'subject' value must be one of the following: {subjects}!")
 
 		# roi
-		if type(roi) != str:
-			raise TypeError("'roi' must be of type str!")
-		rois = self.which_rois(train_dataset)
-		if roi not in rois:
-			raise ValueError(f"'roi' value must be one of the following: {rois}!")
-
-		# model
-		if type(model) != str:
-			raise TypeError("'model' must be of type str!")
-		models = self.which_models('fmri', train_dataset)
-		if model not in models:
-			raise ValueError(f"'model' value must be one of the following: {models}!")
+		if modality == 'fmri':
+			if type(roi) != str:
+				raise TypeError("'roi' must be of type str!")
+			rois = self.which_rois(train_dataset)
+			if roi not in rois:
+				raise ValueError(f"'roi' value must be one of the following: {rois}!")
 
 		# return_metadata
 		if type(return_metadata) != bool:
@@ -296,327 +306,267 @@ class NED():
 		if device == 'auto':
 			device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
-		### Synthesize fMRI responses to the input images ###
-		synthetic_fmri_responses = synthesize_fmri_responses(
-			self.ned_dir,
-			images,
-			train_dataset,
-			subject,
-			roi,
-			model,
-			device
-			)
+		### Synthesize neural responses to the input images ###
+		if modality == 'fmri':
+			if train_dataset == 'nsd':
+				if model == 'fwrf':
+					# Synthesize fMRI responses to images using the
+					# feature-weighted receptive field (fwrf) encoding model
+					# (St-Yves & Naselaris, 2018).
+					synthetic_neural_responses = fmri_nsd_fwrf(
+						self.ned_dir,
+						images,
+						subject,
+						roi,
+						device
+						)
 
-		### Get syntehtic fMRI responses metadata ###
+		elif modality == 'eeg':
+			if train_dataset == 'things_eeg_2':
+				if model == 'vit_b_32':
+					# Synthesize EEG responses to images using a linear mapping
+					# of a pre-trained vision transformer (Dosovitskiy et al.,
+					# 2020) image features.
+					synthetic_neural_responses = eeg_things_eeg_2_vit_b_32(
+						self.ned_dir,
+						images,
+						subject,
+						device
+						)
+
+		### Get the synthetic neural responses metadata ###
 		if return_metadata == True:
-			synthetic_fmri_metadata = get_fmri_metadata(
-				self.ned_dir,
+			metadata = self.get_metadata(
+				modality,
 				train_dataset,
+				model,
 				subject,
-				roi,
-				model
+				roi
 				)
 
 		### Output ###
 		if return_metadata == False:
-			return synthetic_fmri_responses
+			return synthetic_neural_responses
 		else:
-			return synthetic_fmri_responses, synthetic_fmri_metadata
+			return synthetic_neural_responses, metadata
 
 
-	def encode_eeg(self, images, train_dataset, subject, model,
-		return_metadata=True, device='auto'):
+	def get_metadata(self, modality, train_dataset, model, subject, roi=None):
 		"""
-		Synthesize EEG responses for arbitrary stimulus images, and optionally
-		return the synthetic EEG metadata.
+		Get the metadata, consisting in information on the neural data used to
+		train the encoding models (e.g., the amount of fMRI voxels or EEG time
+		points), and on the trained encoding models (e.g., which data was used
+		to train and test the models, and the models accuracy scores).
 
 		Parameters
 		----------
-		images : int
-			Images for which the neural responses are synthesized. Must be a 4-D
-			numpy array of shape (Batch size x 3 RGB Channels x Width x Height)
-			consisting of integer values in the range 0/255. Furthermore, the
-			images must be of square size (i.e., equal width and height).
+		modality : str
+			Neural data modality.
 		train_dataset : str
 			Name of the neural dataset used to train the encoding models.
-		subject : int
-			Subject number for which the EEG image responses are synthesized.
 		model : str
-			Encoding model type used to synthesize the EEG responses.
-		return_metadata : bool
-			If True, return fMRI medatata along with the synthetic EEG
-			responses.
-		device : str
-			Whether to work on the 'cpu' or 'cuda'. If 'auto', the code will
-			use GPU if available, and otherwise CPU.
-
+			Encoding model type used to synthesize the neural responses.
+		subject : int
+			Subject number for which the metadata is loaded.
+		roi : str
+			Only required if modality=='fmri'. Name of the Region of Interest
+			(ROI) for which the metadata is loaded.
+	
 		Returns
 		-------
-		synthetic_eeg_responses : float
-			Synthetic EEG responses for the input stimulus images, of shape:
-			(Images x Repetitions x EEG Channels x EEG time points).
-		synthetic_eeg_metadata : dict
-			Synthetic EEG responses metadata.
+		metadata : dict
+			Synthetic neural responses metadata.
 		"""
 
 		### Check input ###
-		# images
-		if not isinstance(images, np.ndarray) and np.issubdtype(images.dtype, np.integer):
-			raise TypeError("'images' must be a numpy integer array, with values in the range 0/255!")
-		if len(images.shape) != 4:
-			raise ValueError("'images' must be a 4-D array of shape (Batch size x 3 RGB Channels x Width x Height)!")
-		if images.shape[1] != 3:
-			raise ValueError("'images' must have 3 RGB channels!")
-		if images.shape[2] != images.shape[3]:
-			raise ValueError("'images' must be squared (i.e., equal width and height)!")
+		# modality
+		if type(modality) != str:
+			raise TypeError("'modality' must be of type str!")
+		modalities = self.which_modalities()
+		if modality not in modalities:
+			raise ValueError(f"'modality' value must be one of the following: {modalities}!")
 
 		# train_dataset
 		if type(train_dataset) != str:
 			raise TypeError("'train_dataset' must be of type str!")
-		train_dataset_options = self.which_train_datasets('eeg')
+		train_dataset_options = self.which_train_datasets(modality)
 		if train_dataset not in train_dataset_options:
 			raise ValueError(f"'train_dataset' value must be one of the following: {train_dataset_options}!")
-
-		# subject
-		if type(subject) != int:
-			raise TypeError("'subject' must be of type int!")
-		subjects = self.which_subjects('eeg', train_dataset)
-		if subject not in subjects:
-			raise ValueError(f"'subject' value must be one of the following: {subjects}!")
 
 		# model
 		if type(model) != str:
 			raise TypeError("'model' must be of type str!")
-		models = self.which_models('eeg', train_dataset)
+		models = self.which_models(modality, train_dataset)
 		if model not in models:
 			raise ValueError(f"'model' value must be one of the following: {models}!")
 
-		# return_metadata
-		if type(return_metadata) != bool:
-			raise TypeError("'return_metadata' must be of type bool!")
+		# subject
+		if type(subject) != int:
+			raise TypeError("'subject' must be of type int!")
+		subjects = self.which_subjects(modality, train_dataset)
+		if subject not in subjects:
+			raise ValueError(f"'subject' value must be one of the following: {subjects}!")
 
-		# device
-		if type(device) != str:
-			raise TypeError("'device' must be of type str!")
-		device_options = ['cpu', 'cuda', 'auto']
-		if device not in device_options:
-			raise ValueError(f"'device' value must be one of the following: {device_options}!")
+		# roi
+		if modality == 'fmri':
+			if type(roi) != str:
+				raise TypeError("'roi' must be of type str!")
+			rois = self.which_rois(train_dataset)
+			if roi not in rois:
+				raise ValueError(f"'roi' value must be one of the following: {rois}!")
 
-		### Select device ###
-		if device == 'auto':
-			device = 'cuda' if torch.cuda.is_available() else 'cpu'
+		### Metadata directories ###
+		parent_dir = os.path.join(self.ned_dir, 'encoding_models',
+			'modality-fmri', 'training_dataset-'+train_dataset, 'model-'+
+			model, 'metadata')
 
-		### Synthesize EEG responses to the input images ###
-		synthetic_eeg_responses = synthesize_eeg_responses(
-			self.ned_dir,
-			images,
-			train_dataset,
-			subject,
-			model,
-			device
-			)
+		if modality == 'fmri':
+			file_name = 'metadata_sub-' + format(subject,'02') + '_roi-' + \
+				roi + '.npy'
 
-		### Get syntehtic EEG responses metadata ###
-		if return_metadata == True:
-			synthetic_eeg_metadata = get_eeg_metadata(
-				self.ned_dir,
-				train_dataset,
-				subject,
-				model
-				)
+		elif modality == 'eeg':
+			file_name = 'metadata_sub-' + format(subject,'02') + '.npy'
+
+		### Load the metadata ###
+		metadata = np.load(os.path.join(parent_dir, file_name),
+			allow_pickle=True).item()
 
 		### Output ###
-		if return_metadata == False:
-			return synthetic_eeg_responses
-		else:
-			return synthetic_eeg_responses, synthetic_eeg_metadata
+		return metadata
 
 
-	def load_ned_fmri(self, train_dataset, subject, roi, model, imageset,
-		return_metadata=True):
+	def load_synthetic_neural_responses(self, modality, train_dataset, model,
+		imageset, subject, roi=None, return_metadata=True):
 		"""
-		Load the NED's synthetic fMRI responses, and optionally their metadata.
+		Load the NED's synthetic neural responses, and optionally their
+		metadata.
 
 		Parameters
 		----------
+		modality : str
+			Neural data modality.
 		train_dataset : str
 			Name of the neural dataset used to train the encoding models.
-		subject : int
-			Subject number for which the fMRI image responses are synthesized.
-		roi : str
-			Name of the Region of Interest (ROI) for which the fMRI image
-			responses are synthesized.
 		model : str
 			Encoding model type used to synthesize the fMRI responses.
 		imageset : str
+			If 'nsd', load synthetic neural responses for the 73,000 NSD images
+			(Allen et al., 2023).
+			If 'imagenet_val', load synthetic neural responses for the 50,000
+			ILSVRC-2012 validation images (Russakovsky et al., 2015).
+			If 'things', load synthetic neural responses for the 26,107 images
+			from the THINGS database (Hebart et al., 2019).
 			Imageset for which the fMRI responses are synthesized. Available
 			options are 'nsd', 'imagenet_val' and 'things'.
+		subject : int
+			Subject number for which the fMRI image responses are synthesized.
+		roi : str
+			Only required if modality=='fmri'. Name of the Region of Interest
+			(ROI) for which the fMRI image responses are synthesized.
 		return_metadata : bool
 			If True, return fMRI medatata along with the synthetic fMRI
 			responses.
 
 		Returns
 		-------
-		synthetic_fmri_responses : h5py
-			Synthetic fMRI responses for the input stimulus images, of shape:
+		synthetic_neural_responses : h5py
+			Synthetic neural responses for the input stimulus images.
+			If modality=='fmri', the neural response will be of shape:
 			(Images x N ROI Voxels).
-		synthetic_fmri_metadata : dict
-			Synthetic fMRI responses metadata.
+			If modality=='eeg', the neural response will be of shape:
+			(Images x Repetitions x EEG Channels x EEG time points) if
+		metadata : dict
+			Synthetic neural responses metadata.
 		"""
 
 		### Check input ###
+		# modality
+		if type(modality) != str:
+			raise TypeError("'modality' must be of type str!")
+		modalities = self.which_modalities()
+		if modality not in modalities:
+			raise ValueError(f"'modality' value must be one of the following: {modalities}!")
+
 		# train_dataset
 		if type(train_dataset) != str:
 			raise TypeError("'train_dataset' must be of type str!")
-		train_dataset_options = self.which_train_datasets('fmri')
+		train_dataset_options = self.which_train_datasets(modality)
 		if train_dataset not in train_dataset_options:
 			raise ValueError(f"'train_dataset' value must be one of the following: {train_dataset_options}!")
+
+		# model
+		if type(model) != str:
+			raise TypeError("'model' must be of type str!")
+		models = self.which_models(modality, train_dataset)
+		if model not in models:
+			raise ValueError(f"'model' value must be one of the following: {models}!")
+
+		# imageset
+		if type(imageset) != str:
+			raise TypeError("'imageset' must be of type str!")
+		imagesets = ['nsd', 'imagenet_val', 'things']
+		if imageset not in imagesets:
+			raise ValueError(f"'imageset' value must be one of the following: {imagesets}!")
 
 		# subject
 		if type(subject) != int:
 			raise TypeError("'subject' must be of type int!")
-		subjects = self.which_subjects('fmri', train_dataset)
+		subjects = self.which_subjects(modality, train_dataset)
 		if subject not in subjects:
 			raise ValueError(f"'subject' value must be one of the following: {subjects}!")
 
 		# roi
-		if type(roi) != str:
-			raise TypeError("'roi' must be of type str!")
-		rois = self.which_rois(train_dataset)
-		if roi not in rois:
-			raise ValueError(f"'roi' value must be one of the following: {rois}!")
-
-		# model
-		if type(model) != str:
-			raise TypeError("'model' must be of type str!")
-		models = self.which_models('fmri', train_dataset)
-		if model not in models:
-			raise ValueError(f"'model' value must be one of the following: {models}!")
-
-		# imageset
-		if type(imageset) != str:
-			raise TypeError("'imageset' must be of type str!")
-		imagesets = ['nsd', 'imagenet_val', 'things']
-		if imageset not in imagesets:
-			raise ValueError(f"'imageset' value must be one of the following: {imagesets}!")
+		if modality == 'fmri':
+			if type(roi) != str:
+				raise TypeError("'roi' must be of type str!")
+			rois = self.which_rois(train_dataset)
+			if roi not in rois:
+				raise ValueError(f"'roi' value must be one of the following: {rois}!")
 
 		# return_metadata
 		if type(return_metadata) != bool:
 			raise TypeError("'return_metadata' must be of type bool!")
 
-		### Load NED's synthetic fMRI responses ###
-		data_dir = os.path.join(self.ned_dir, 'synthetic_neural_responses',
-			'modality-fmri', 'training_dataset-'+train_dataset, 'model-'+model,
-			'imageset-'+imageset, 'synthetic_neural_responses_'+
-			'training_dataset-'+train_dataset+'_model-'+model+'_imageset-'+
-			imageset+'_sub-'+format(subject, '02')+'_roi-'+roi+'.h5')
-		synthetic_fmri_responses = h5py.File(
-			data_dir, 'r').get('synthetic_neural_responses')
-		
+		### Synthetic neural responses directories ###
+		parent_dir = os.path.join(self.ned_dir, 'synthetic_neural_responses',
+			'modality-'+modality, 'training_dataset-'+train_dataset, 'model-'+
+			model, 'imageset-'+imageset)
+			
+		if modality == 'fmri':
+			file_name = 'synthetic_neural_responses_training_dataset-' + \
+				train_dataset + '_model-' + model + '_imageset-' + imageset + \
+				'_sub-' + format(subject, '02') + '_roi-' + roi + '.h5'
+
+		elif modality == 'eeg':
+			file_name = 'synthetic_neural_responses_training_dataset-' + \
+				train_dataset + '_model-' + model + '_imageset-' + imageset + \
+				'_sub-' + format(subject, '02') +'.h5'
+
+		### Load NED's synthetic neural responses ###
+		synthetic_neural_responses = h5py.File(os.path.join(parent_dir,
+			file_name), 'r').get('synthetic_neural_responses')
+
+		### Metadata directories ###
+		if return_metadata == True:
+			if modality == 'fmri':
+				file_name = 'synthetic_neural_responses_metadata_' + \
+					'training_dataset-' + train_dataset + '_model-' + model + \
+					'_imageset-' + train_dataset + '_sub-' + \
+					format(subject,'02') + '_roi-' + roi + '.npy'
+			elif modality == 'eeg':
+				file_name = 'synthetic_neural_responses_metadata_' + \
+					'training_dataset-' + train_dataset + '_model-' + model + \
+					'_imageset-' + train_dataset + '_sub-' + \
+					format(subject,'02') + '.npy'
+
 		### Load the metadata ###
 		if return_metadata == True:
-			metadata_dir = os.path.join(self.ned_dir,
-				'synthetic_neural_responses', 'modality-fmri',
-				'training_dataset-'+train_dataset, 'model-'+model,
-				'imageset-'+train_dataset, 'synthetic_neural_responses_'+
-				'metadata_training_dataset-'+train_dataset+'_model-'+model+
-				'_imageset-'+train_dataset+'_sub-'+format(subject,'02')+
-				'_roi-'+roi+'.npy')
-			synthetic_fmri_metadata = np.load(metadata_dir,
+			metadata = np.load(os.path.join(parent_dir, file_name),
 				allow_pickle=True).item()
 
 		### Output ###
 		if return_metadata == False:
-			return synthetic_fmri_responses
+			return synthetic_neural_responses
 		else:
-			return synthetic_fmri_responses, synthetic_fmri_metadata
-
-
-	def load_ned_eeg(self, train_dataset, subject, model, imageset,
-		return_metadata=True):
-		"""
-		Load the NED's synthetic EEG responses, and optionally their metadata.
-
-		Parameters
-		----------
-		train_dataset : str
-			Name of the neural dataset used to train the encoding models.
-		subject : int
-			Subject number for which the EEG image responses are synthesized.
-		model : str
-			Encoding model type used to synthesize the EEG responses.
-		imageset : str
-			Imageset for which the EEG responses are synthesized. Available
-			options are 'nsd', 'imagenet_val' and 'things'.
-		return_metadata : bool
-			If True, return EEG medatata along with the synthetic EEG
-			responses.
-
-		Returns
-		-------
-		synthetic_eeg_responses : float
-			Synthetic EEG responses for the input stimulus images, of shape:
-			(Images x Repetitions x EEG Channels x EEG time points).
-		synthetic_eeg_metadata : dict
-			Synthetic EEG responses metadata.
-		"""
-
-		### Check input ###
-		# train_dataset
-		if type(train_dataset) != str:
-			raise TypeError("'train_dataset' must be of type str!")
-		train_dataset_options = self.which_train_datasets('eeg')
-		if train_dataset not in train_dataset_options:
-			raise ValueError(f"'train_dataset' value must be one of the following: {train_dataset_options}!")
-
-		# subject
-		if type(subject) != int:
-			raise TypeError("'subject' must be of type int!")
-		subjects = self.which_subjects('eeg', train_dataset)
-		if subject not in subjects:
-			raise ValueError(f"'subject' value must be one of the following: {subjects}!")
-
-		# model
-		if type(model) != str:
-			raise TypeError("'model' must be of type str!")
-		models = self.which_models('eeg', train_dataset)
-		if model not in models:
-			raise ValueError(f"'model' value must be one of the following: {models}!")
-
-		# imageset
-		if type(imageset) != str:
-			raise TypeError("'imageset' must be of type str!")
-		imagesets = ['nsd', 'imagenet_val', 'things']
-		if imageset not in imagesets:
-			raise ValueError(f"'imageset' value must be one of the following: {imagesets}!")
-
-		# return_metadata
-		if type(return_metadata) != bool:
-			raise TypeError("'return_metadata' must be of type bool!")
-
-		### Load NED's synthetic EEG responses ###
-		data_dir = os.path.join(self.ned_dir, 'synthetic_neural_responses',
-			'modality-eeg', 'training_dataset-'+train_dataset, 'model-'+model,
-			'imageset-'+imageset, 'synthetic_neural_responses_training'+
-			'dataset-'+train_dataset+'_model-'+model+'_imageset-'+imageset+
-			'_sub-'+format(subject, '02')+'.h5')
-		synthetic_eeg_responses = h5py.File(
-			data_dir, 'r').get('synthetic_neural_responses')
-
-		### Load the metadata ###
-		if return_metadata == True:
-			metadata_dir = os.path.join(self.ned_dir,
-				'synthetic_neural_responses', 'modality-eeg',
-				'training_dataset-'+train_dataset, 'model-'+model,
-				'imageset-'+imageset, 'synthetic_neural_responses_metadata_'+
-				'training_dataset-'+train_dataset+'_model-'+model+'_imageset-'+
-				imageset+'_sub-'+format(subject,'02')+'.npy')
-			synthetic_eeg_metadata = np.load(metadata_dir,
-				allow_pickle=True).item()
-
-		### Output ###
-		if return_metadata == False:
-			return synthetic_eeg_responses
-		else:
-			return synthetic_eeg_responses, synthetic_eeg_metadata
+			return synthetic_neural_responses, metadata
 

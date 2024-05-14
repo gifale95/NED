@@ -26,13 +26,13 @@ You will additionally need to install the Python dependencies found in [requirem
 
 
 
-## 📃 How to use
+## 🕹️ How to use
 
 ### 🧰 Download the Neural Encoding Dataset
 
 To use ```NED``` you first need to download the Neural Encoding Dataset from [here][ned_data]. Depending on how you want to use the Neural Encoding Dataset, you might need to download all of it, or only parts of it. For this please see the [data manual][data_manual], which describes how the Neural Encoding Dataset is structured.
 
-### Available Encoding Models
+### 🧠 Available Encoding Models
 
 Following is a table with the available encoding models available in the Neural Encoding Dataset. Each row of the table corresponds to a different encoding model, and the three columns indicate their attributes:
 
@@ -47,9 +47,12 @@ Following is a table with the available encoding models available in the Neural 
 
 For more information on training datasets and model types, please see the Neural Encoding Dataset [data manual][data_manual].
 
-### NED Functions !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+ !!!!!!!!!!!!!!!!!!!! ADD LIST OF SUBJECTS AND FMRI ROIS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-Small example of utility functions (see frrsa & ncsnr repos)
+
+### ⚙️ NED Functions !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+Small example of utility functions (see frrsa & ncsnr repos). Give examples of synthesizing neural responses for both fMRI and EEG, of loading pre-generated neural responses, and of loading the metadata.
 
 ### 💻 Tutorials
 
