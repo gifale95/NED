@@ -26,19 +26,34 @@ You will additionally need to install the Python dependencies found in [requirem
 
 
 
-## 📃 How to use !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+## 📃 How to use
 
-To use ```NED``` you first need to download the Neural Encoding Dataset from [here][ned_data]. Depending on how you want to use the Neural Encoding Dataset, you might not need to download all of it. For this please see the [data manual][data_manual], which describes how the Neural Encoding Dataset is structured.
+### 🧰 Download the Neural Encoding Dataset
+
+To use ```NED``` you first need to download the Neural Encoding Dataset from [here][ned_data]. Depending on how you want to use the Neural Encoding Dataset, you might need to download all of it, or only parts of it. For this please see the [data manual][data_manual], which describes how the Neural Encoding Dataset is structured.
+
+### Available encoding models !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+Following is a table with the available encoding models available in the Neural Encoding Dataset. Each row of the table corresponds to a different encoding model, and the three columns indicate the attributes of these different encoding models:
+
+> * **modality:** the neural data modality on which the encoding model was trained.
+> * **training_dataset:** the neural dataset on which the encoding model was trained.
+> * **model:** the type of encoding model used.
+
+For more information on training dataset and model type, please see the Neural Encoding Dataset [data manual][data_manual].
+
+| modality | training_dataset | model |
+|----------|----------|----------|
+| fmri | nsd | fwrf |
+| eeg | things_eeg_2 | vit_b_32 |
+
+### NED Functions !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 Small example of utility functions (see frrsa & ncsnr repos)
 
-Provide list of available modalities, training datasets, models.
+### 💻 Tutorials
 
-
-
-## 💻 Tutorials
-
-To familiarize with ```NED``` we created tutorials for both fMRI and EEG modalities. In these tutorial you will learn how to use ```NED```'s functions to synthesize fMRI and EEG responses for new images, as well as using the pre-generated synthetic fMRI and EEG responses for ~150,000 naturalistic images.
+To familiarize with the Neural Encoding Dataset we created tutorials for both fMRI and EEG modalities. In these tutorial you will learn how to use ```NED```'s functions, for example to synthesize fMRI and EEG responses for images of your choice, and you will also familiarize with the pre-generated synthetic fMRI and EEG responses for ~150,000 naturalistic images.
 
 These tutorials are available on either [Colab][colab] or [Jupyter Notebook][jupyter].
 
@@ -48,11 +63,11 @@ These tutorials are available on either [Colab][colab] or [Jupyter Notebook][jup
 
 The folder [```../NED/ned_creation_code/```][ned_creation_code] contains the code used to create the Neural Encoding Dataset, divided in the following sub-folders:
 
-> * [```../00_prepare_data/```][prepare_data]: prepare the data (i.e., images and corresponding neural responses) used to train the encoding models.
-> * [```../01_train_encoding_models/```][train_encoding]: train the encoding models, and save their weights.
-> * [```../02_test_encoding_models/```][test_encoding]: test the encoding models (i.e., compute and plot their encoding accuracy).
-> * [```../03_create_metadata/```][test_encoding]: create metadata files for the encoding models and their synthetic neural responses.
-> * [```../04_synthesize_neural_responses/```][synthesize]: use the trained encoding models to synthesize neural responses for ~150,000 naturalistic images.
+> * **[```../00_prepare_data/```][prepare_data]:** prepare the data (i.e., images and corresponding neural responses) used to train the encoding models.
+> * **[```../01_train_encoding_models/```][train_encoding]:** train the encoding models, and save their weights.
+> * **[```../02_test_encoding_models/```][test_encoding]:** test the encoding models (i.e., compute and plot their encoding accuracy).
+> * **[```../03_create_metadata/```][test_encoding]:** create metadata files for the encoding models and their synthetic neural responses.
+> * **[```../04_synthesize_neural_responses/```][synthesize]:** use the trained encoding models to synthesize neural responses for ~150,000 naturalistic images.
 
 
 
@@ -64,7 +79,7 @@ If you come across problems with the toolbox, please submit an issue!
 
 ## 📜 Citation
 
-If you use the Neural Encoding Dataset, please cite the following paper:
+If you use the Neural Encoding Dataset, please cite:
 
 > *Gifford AT, Cichy RM. 2024. In preparation.*
 
