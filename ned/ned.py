@@ -505,23 +505,23 @@ class NED():
 			raise TypeError("'return_metadata' must be of type bool!")
 
 		### Load NED's synthetic fMRI responses ###
-		data_dir = os.path.join(self.ned_dir, 'dataset', 'modality-fmri',
-			'training_dataset-'+train_dataset, 'model-'+model,
-			'synthetic_neural_responses', 'imageset-'+imageset,
-			'synthetic_neural_responses_training_dataset-'+train_dataset+
-			'_model-'+model+'_imageset-'+imageset+'_sub-'+format(subject, '02')+
-			'_roi-'+roi+'.h5')
+		data_dir = os.path.join(self.ned_dir, 'synthetic_neural_responses',
+			'modality-fmri', 'training_dataset-'+train_dataset, 'model-'+model,
+			'imageset-'+imageset, 'synthetic_neural_responses_'+
+			'training_dataset-'+train_dataset+'_model-'+model+'_imageset-'+
+			imageset+'_sub-'+format(subject, '02')+'_roi-'+roi+'.h5')
 		synthetic_fmri_responses = h5py.File(
 			data_dir, 'r').get('synthetic_neural_responses')
 		
 		### Load the metadata ###
 		if return_metadata == True:
-			metadata_dir = os.path.join(self.ned_dir, 'dataset',
-				'modality-fmri', 'training_dataset-'+train_dataset, 'model-'+
-				model, 'synthetic_neural_responses', 'imageset-'+train_dataset,
-				'synthetic_neural_responses_metadata_training_dataset-'+
-				train_dataset+'_model-'+model+'_imageset-'+train_dataset+
-				'_sub-'+format(subject,'02')+'_roi-'+roi+'.npy')
+			metadata_dir = os.path.join(self.ned_dir,
+				'synthetic_neural_responses', 'modality-fmri',
+				'training_dataset-'+train_dataset, 'model-'+model,
+				'imageset-'+train_dataset, 'synthetic_neural_responses_'+
+				'metadata_training_dataset-'+train_dataset+'_model-'+model+
+				'_imageset-'+train_dataset+'_sub-'+format(subject,'02')+
+				'_roi-'+roi+'.npy')
 			synthetic_fmri_metadata = np.load(metadata_dir,
 				allow_pickle=True).item()
 
@@ -594,24 +594,23 @@ class NED():
 		if type(return_metadata) != bool:
 			raise TypeError("'return_metadata' must be of type bool!")
 
-		### Load NED's synthetic fMRI responses ###
-		data_dir = os.path.join(self.ned_dir, 'dataset', 'modality-eeg',
-			'training_dataset-'+train_dataset, 'model-'+model,
-			'synthetic_neural_responses', 'imageset-'+imageset,
-			'synthetic_neural_responses_training_dataset-'+train_dataset+
-			'_model-'+model+'_imageset-'+imageset+'_sub-'+format(subject, '02')+
-			'.h5')
+		### Load NED's synthetic EEG responses ###
+		data_dir = os.path.join(self.ned_dir, 'synthetic_neural_responses',
+			'modality-eeg', 'training_dataset-'+train_dataset, 'model-'+model,
+			'imageset-'+imageset, 'synthetic_neural_responses_training'+
+			'dataset-'+train_dataset+'_model-'+model+'_imageset-'+imageset+
+			'_sub-'+format(subject, '02')+'.h5')
 		synthetic_eeg_responses = h5py.File(
 			data_dir, 'r').get('synthetic_neural_responses')
 
 		### Load the metadata ###
 		if return_metadata == True:
-			metadata_dir = os.path.join(self.ned_dir, 'dataset',
-				'modality-eeg', 'training_dataset-'+train_dataset, 'model-'+
-				model, 'synthetic_neural_responses', 'imageset-'+imageset,
-				'synthetic_neural_responses_metadata_training_dataset-'+
-				train_dataset+'_model-'+model+'_imageset-'+imageset+
-				'_sub-'+format(subject,'02')+'.npy')
+			metadata_dir = os.path.join(self.ned_dir,
+				'synthetic_neural_responses', 'modality-eeg',
+				'training_dataset-'+train_dataset, 'model-'+model,
+				'imageset-'+imageset, 'synthetic_neural_responses_metadata_'+
+				'training_dataset-'+train_dataset+'_model-'+model+'_imageset-'+
+				imageset+'_sub-'+format(subject,'02')+'.npy')
 			synthetic_eeg_metadata = np.load(metadata_dir,
 				allow_pickle=True).item()
 

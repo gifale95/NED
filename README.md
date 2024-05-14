@@ -8,7 +8,7 @@ For additional information on the Neural Encoding Dataset you can check out the 
 
 
 
-## 🤝 Help the Neural Encoding Dataset Expand
+## 🤝 Contribute to Expanding the Neural Encoding Dataset
 
 Do you have encoding models with higher prediction accuracies than the ones currently available in the Neural Encoding Dataset, and would like to make them available to the community? Or maybe you have encoding models for new neural datasets, data modalities (e.g., MEG/ECoG/animal), or stimulus types (e.g., videos, language) that you would like to share? Or perhaps you have suggestions for improving the Neural Encoding Dataset? Then please get in touch vith Ale (alessandro.gifford@gmail.com): all feedback and help is strongly appreciated!
 
@@ -55,7 +55,8 @@ The folder [```../NED/ned_creation_code/```][ned_creation_code] contains the cod
 > * [```../00_prepare_data/```][prepare_data]: prepare the data (i.e., images and corresponding neural responses) used to train the encoding models.
 > * [```../01_train_encoding_models/```][train_encoding]: train the encoding models, and save their weights.
 > * [```../02_test_encoding_models/```][test_encoding]: test the encoding models (i.e., compute and plot their encoding accuracy).
-> * [```../03_synthesize_neural_responses/```][synthesize]: use the trained encoding models to synthesize neural responses for ~150,000 naturalistic images.
+> * [```../03_create_metadata/```][test_encoding]: create metadata files for the encoding models and their synthetic neural responses.
+> * [```../04_synthesize_neural_responses/```][synthesize]: use the trained encoding models to synthesize neural responses for ~150,000 naturalistic images.
 
 
 

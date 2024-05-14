@@ -1,9 +1,6 @@
 import os
 import numpy as np
 from tqdm import tqdm
-from PIL import Image
-import nibabel as nib
-import h5py
 import torch
 import torchvision
 from torchvision import transforms as trn
@@ -150,18 +147,10 @@ def get_fmri_metadata(ned_dir, train_dataset, subject, roi, model):
 	"""
 
 	### Load the metadata ###
-	metadata_dir = os.path.join(ned_dir, 'dataset', 'modality-fmri',
-		'training_dataset-'+train_dataset, 'model-'+model,
-		'synthetic_neural_responses', 'imageset-'+train_dataset,
-		'synthetic_neural_responses_metadata_training_dataset-'+train_dataset+
-		'_model-'+model+'_imageset-'+train_dataset+'_sub-'+format(subject,'02')+
-		'_roi-'+roi+'.npy')
-	metadata = np.load(metadata_dir, allow_pickle=True).item()
-
-	### Select the relevant metadata ###
-	synthetic_fmri_metadata = {}
-	synthetic_fmri_metadata['fmri'] = metadata['fmri']
-	synthetic_fmri_metadata['encoding_models'] = metadata['encoding_models']
+	metadata_dir = os.path.join(ned_dir, 'encoding_models', 'modality-fmri',
+		'training_dataset-'+train_dataset, 'model-'+model, 'metadata',
+		'metadata_sub-'+format(subject,'02')+'_roi-'+roi+'.npy')
+	synthetic_fmri_metadata = np.load(metadata_dir, allow_pickle=True).item()
 
 	### Output ###
 	return synthetic_fmri_metadata
@@ -189,18 +178,10 @@ def get_eeg_metadata(ned_dir, train_dataset, subject, model):
 	"""
 
 	### Load the metadata ###
-	metadata_dir = os.path.join(ned_dir, 'dataset', 'modality-eeg',
-		'training_dataset-'+train_dataset, 'model-'+model,
-		'synthetic_neural_responses', 'imageset-things',
-		'synthetic_neural_responses_metadata_training_dataset-'+train_dataset+
-		'_model-'+model+'_imageset-things_sub-'+format(subject,'02')+
-		'.npy')
-	metadata = np.load(metadata_dir, allow_pickle=True).item()
-
-	### Select the relevant metadata ###
-	synthetic_eeg_metadata = {}
-	synthetic_eeg_metadata['eeg'] = metadata['eeg']
-	synthetic_eeg_metadata['encoding_models'] = metadata['encoding_models']
+	metadata_dir = os.path.join(ned_dir, 'encoding_models', 'modality-eeg',
+		'training_dataset-'+train_dataset, 'model-'+model, 'metadata',
+		'metadata_sub-'+format(subject,'02')+'.npy')
+	synthetic_eeg_metadata = np.load(metadata_dir, allow_pickle=True).item()
 
 	### Output ###
 	return synthetic_eeg_metadata
@@ -252,15 +233,15 @@ def fmri_nsd_fwrf(ned_dir, images, subject, roi, device):
 	### Load the trained encoding model weights ###
 	# Trained model directory
 	if roi in ['lateral', 'ventral']:
-		model_dir_1 = os.path.join(ned_dir, 'dataset', 'modality-fmri',
-			'training_dataset-nsd', 'model-fwrf', 'trained_models_weights',
+		model_dir_1 = os.path.join(ned_dir, 'encoding_models', 'modality-fmri',
+			'training_dataset-nsd', 'model-fwrf', 'encoding_models_weights',
 			'weights_'+'sub-'+format(subject,'02')+'_roi-'+roi+'_split-1'+'.pt')
-		model_dir_2 = os.path.join(ned_dir, 'dataset', 'modality-fmri',
-			'training_dataset-nsd', 'model-fwrf', 'trained_models_weights',
+		model_dir_2 = os.path.join(ned_dir, 'encoding_models', 'modality-fmri',
+			'training_dataset-nsd', 'model-fwrf', 'encoding_models_weights',
 			'weights_'+'sub-'+format(subject,'02')+'_roi-'+roi+'_split-2'+'.pt')
 	else:
-		model_dir = os.path.join(ned_dir, 'dataset', 'modality-fmri',
-			'training_dataset-nsd', 'model-fwrf', 'trained_models_weights',
+		model_dir = os.path.join(ned_dir, 'encoding_models', 'modality-fmri',
+			'training_dataset-nsd', 'model-fwrf', 'encoding_models_weights',
 			'weights_'+'sub-'+format(subject,'02')+'_roi-'+roi+'.pt')
 
 	# Load the model
@@ -423,13 +404,10 @@ def eeg_things_eeg_2_vit_b_32(ned_dir, images, subject, device):
 		(Images x Repetitions x EEG Channels x EEG time points).
 	"""
 
-	### Get the EEG cannels and time points dimensions ###
-	metadata_dir = os.path.join(ned_dir, 'dataset', 'modality-eeg',
+	### Get the EEG channels and time points dimensions ###
+	metadata_dir = os.path.join(ned_dir, 'encoding_models', 'modality-eeg',
 		'training_dataset-things_eeg_2', 'model-vit_b_32',
-		'synthetic_neural_responses', 'imageset-things',
-		'synthetic_neural_responses_metadata_training_dataset-things_eeg_2'+
-		'_model-vit_b_32_imageset-things'+'_sub-'+format(subject,'02')+
-		'.npy')
+		'metadata', 'metadata_sub-'+format(subject,'02')+'.npy')
 	metadata = np.load(metadata_dir, allow_pickle=True).item()
 	ch_names = metadata['eeg']['ch_names']
 	times = metadata['eeg']['times']
@@ -438,7 +416,7 @@ def eeg_things_eeg_2_vit_b_32(ned_dir, images, subject, device):
 	model = torchvision.models.vit_b_32(weights='DEFAULT')
 	model.eval()
 
-	# Select the used layers for feature extraction #
+	# Select the used layers for feature extraction
 	model_layers = ['encoder.layers.encoder_layer_0.add_1',
 					'encoder.layers.encoder_layer_1.add_1',
 					'encoder.layers.encoder_layer_2.add_1',
@@ -457,14 +435,14 @@ def eeg_things_eeg_2_vit_b_32(ned_dir, images, subject, device):
 
 	### Load the scaler and PCA weights ###
 	# Scaler
-	weights_dir = os.path.join(ned_dir, 'dataset', 'modality-eeg',
+	weights_dir = os.path.join(ned_dir, 'encoding_models', 'modality-eeg',
 		'training_dataset-things_eeg_2', 'model-vit_b_32',
-		'trained_models_weights', 'StandardScaler_param.joblib')
+		'encoding_models_weights', 'StandardScaler_param.joblib')
 	scaler = load(weights_dir)
 	# PCA
-	weights_dir = os.path.join(ned_dir, 'dataset', 'modality-eeg',
+	weights_dir = os.path.join(ned_dir, 'encoding_models', 'modality-eeg',
 		'training_dataset-things_eeg_2', 'model-vit_b_32',
-		'trained_models_weights', 'pca_param.joblib')
+		'encoding_models_weights', 'pca_param.joblib')
 	pca = load(weights_dir)
 
 	### Preprocess the images ###
@@ -502,9 +480,9 @@ def eeg_things_eeg_2_vit_b_32(ned_dir, images, subject, device):
 	features = features[:,:250]
 
 	### Load the trained regression weights ###
-	weights_dir = os.path.join(ned_dir, 'dataset', 'modality-eeg',
+	weights_dir = os.path.join(ned_dir, 'encoding_models', 'modality-eeg',
 		'training_dataset-things_eeg_2', 'model-vit_b_32',
-		'trained_models_weights', 'LinearRegression_param_sub-'+
+		'encoding_models_weights', 'LinearRegression_param_sub-'+
 		format(subject, '02')+'.joblib')
 	regression_weights = load(weights_dir)
 
