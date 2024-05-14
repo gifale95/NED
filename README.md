@@ -14,7 +14,7 @@ Do you have encoding models with higher prediction accuracies than the ones curr
 
 
 
-## 🔧 Installation
+## ⚙️ Installation
 
 To install ```NED``` run the following command on your terminal:
 
@@ -50,7 +50,7 @@ For more information on training datasets and model types, please see the Neural
  !!!!!!!!!!!!!!!!!!!! ADD LIST OF SUBJECTS AND FMRI ROIS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 
-### ⚙️ NED Functions !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+### ✨ NED Functions !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 Small example of utility functions (see frrsa & ncsnr repos). Give examples of synthesizing neural responses for both fMRI and EEG, of loading pre-generated neural responses, and of loading the metadata.
 
