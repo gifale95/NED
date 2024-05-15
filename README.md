@@ -2,7 +2,7 @@
 
 The `NED` toolbox provides utility functions and tutorials for using the [**Neural Encoding Dataset**][ned_website]: trained encoding models of fMRI and EEG responses to images of multiple subjects, which you can use to synthesize fMRI and EEG responses to any image of your choice.
 
-The Neural Encoding Dataset also comes with pre-generated synthetic fMRI and EEG responses for ~150,000 naturalistic images coming from the [ImageNet 2012 Challenge][imagenet] ([*Russakovsky et al., 2015*][russakovsky]), the [THINGS Database][things] ([*Hebart et al., 2019*][hebart]), and the [Natural Scenes Dataset][nsd] ([*Allen et al., 2022*][allen]).
+The Neural Encoding Dataset also comes with pre-generated synthetic fMRI and EEG responses for ~150,000 naturalistic images coming from the [ImageNet 2012 Challenge][imagenet] ([*Russakovsky et al., 2015*][russakovsky]), the [THINGS Database][things] ([*Hebart et al., 2019*][hebart]), and the [Natural Scenes Dataset][nsd] ([*Allen et al., 2022*][allen]), which you can use for research purposes.
 
 For additional information on the Neural Encoding Dataset you can check out the [website][ned_website].
 
@@ -39,17 +39,15 @@ Following is a table with the encoding models available in the Neural Encoding D
 * **modality:** the neural data modality on which the encoding model was trained.
 * **training_dataset:** the neural dataset on which the encoding model was trained.
 * **model:** the type of encoding model used.
-* **subjects:** amount of independent subjects on which encoding models were trained (a separate encoding model is trained for each subject).
+* **subject:** independent subjects on which encoding models were trained (a separate encoding model is trained for each subject).
+* **roi:** independent Regions of Interest (ROIs) on which encoding models were trained (a separate encoding model is trained for each ROI). This only applies to fMRI data.
 
-| modality | training_dataset | model |
-|-------------|-----------------------|----------|
-| fmri | nsd | fwrf |
-| eeg | things_eeg_2 | vit_b_32 |
+| modality | training_dataset | model | subject | roi |
+|-------------|-----------------------|----------| ----------| ----|
+| fmri | nsd | fwrf | 1, 2, 3, 4, 5, 6, 7, 8 | V1, V2, V3, V4, EBA, FBA-2, OFA, FFA-1, FFA-2, PPA, RSC, OPA, OWFA, VWFA-1, VWFA-2, mfs-words, early, midventral, midlateral, midparietal, parietal, lateral, ventral|
+| eeg | things_eeg_2 | vit_b_32 | 1, 2, 3, 4, 5, 6, 7, 8, 9, 10| – |
  
 For more information on the encoding model's *attributes* (e.g., training dataset or model type) please see the [data manual][data_manual]. These *attributes* are required inputs when using `NED`'s functions (i.e., to select the encoding model you actually want to use).
-
- !!!!!!!!!!!!!!!!!!!! ADD LIST OF FMRI ROIS and subjects !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
 
 ### ✨ NED Functions
 
