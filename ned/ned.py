@@ -417,7 +417,7 @@ class NED():
 
 		### Metadata directories ###
 		parent_dir = os.path.join(self.ned_dir, 'encoding_models',
-			'modality-fmri', 'training_dataset-'+train_dataset, 'model-'+
+			'modality-'+modality, 'training_dataset-'+train_dataset, 'model-'+
 			model, 'metadata')
 
 		if modality == 'fmri':
@@ -551,12 +551,12 @@ class NED():
 			if modality == 'fmri':
 				file_name = 'synthetic_neural_responses_metadata_' + \
 					'training_dataset-' + train_dataset + '_model-' + model + \
-					'_imageset-' + train_dataset + '_sub-' + \
+					'_imageset-' + imageset + '_sub-' + \
 					format(subject,'02') + '_roi-' + roi + '.npy'
 			elif modality == 'eeg':
 				file_name = 'synthetic_neural_responses_metadata_' + \
 					'training_dataset-' + train_dataset + '_model-' + model + \
-					'_imageset-' + train_dataset + '_sub-' + \
+					'_imageset-' + imageset + '_sub-' + \
 					format(subject,'02') + '.npy'
 
 		### Load the metadata ###
