@@ -51,7 +51,7 @@ For more information on the encoding model's *attributes* (e.g., training datase
  !!!!!!!!!!!!!!!!!!!! ADD LIST OF FMRI ROIS and subjects !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 
-### ✨ NED Functions !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+### ✨ NED Functions
 
 #### Initialize the NED object
 
