@@ -53,7 +53,7 @@ For more information on the encoding model's *attributes* (e.g., training datase
 
 ### ✨ NED Functions
 
-#### Initialize the NED object
+#### 🔹 Initialize the NED object
 
 To use `NED`'s functions you will first need to import `NED` and create a `ned_object`.
 
@@ -66,7 +66,7 @@ ned_dir = '../neural_encoding_dataset/'
 # Create the NED object
 ned_object = NED(ned_dir)
 ```
-#### Synthesize Neural Responses to any Image of Your Choice
+#### 🔹 Synthesize Neural Responses to any Image of Your Choice
 
 The `encode` method will synthesize fMRI or EEG responses to any image of your choice, and optionally return the corresponding metadata (i.e., information on the neural data used to train the encoding models such as the amount of fMRI voxels or EEG time points, and on the trained encoding models, such as which data was used to train and test the models, or the models accuracy scores). You can find more information on the input parameters and output of the `encode` method in its [documentation string][encode_doc].
 
@@ -102,7 +102,7 @@ encode_eeg, eeg_metadata = ned_object.encode(
 	)
 ```
 
-#### Load Pre-Generated Synthetic Neural Responses
+#### 🔹 Load Pre-Generated Synthetic Neural Responses
 
 The `load_synthetic_neural_responses` method will pre-generated synthetic fMRI or EEG responses for ~150,000 naturalistic images (either 73,000 images from the Natural Scenes Dataset, 26,107 images from the THINGS Database, or 50,000 images from the ImageNet 2012 Challenge validation split), and optionally return the corresponding metadata. You can find more information on the input parameters and output of the `load_synthetic_neural_responses` method in its [documentation string][load_synthetic_doc].
 
