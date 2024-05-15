@@ -102,7 +102,7 @@ encode_eeg, eeg_metadata = ned_object.encode(
 	)
 ```
 
-#### !!!!!!!!!!!!!!!!!!!!!!!!!!!!
+#### Load Pre-Generated Synthetic Neural Responses
 
 The `load_synthetic_neural_responses` method will pre-generated synthetic fMRI or EEG responses for ~150,000 naturalistic images (either 73,000 images from the Natural Scenes Dataset, 26,107 images from the THINGS Database, or 50,000 images from the ImageNet 2012 Challenge validation split), and optionally return the corresponding metadata. You can find more information on the input parameters and output of the `load_synthetic_neural_responses` method in its [documentation string][load_synthetic_doc].
 
