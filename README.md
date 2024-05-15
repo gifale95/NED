@@ -143,7 +143,7 @@ The folder [`../NED/ned_creation_code/`][ned_creation_code] contains the code us
 * **[`../00_prepare_data/`][prepare_data]:** prepare the data (i.e., images and corresponding neural responses) used to train the encoding models.
 * **[`../01_train_encoding_models/`][train_encoding]:** train the encoding models, and save their weights.
 * **[`../02_test_encoding_models/`][test_encoding]:** test the encoding models (i.e., compute and plot their encoding accuracy).
-* **[`../03_create_metadata/`][test_encoding]:** create metadata files for the encoding models and their synthetic neural responses.
+* **[`../03_create_metadata/`][metadata]:** create metadata files for the encoding models and their synthetic neural responses.
 * **[`../04_synthesize_neural_responses/`][synthesize]:** use the trained encoding models to synthesize neural responses for ~150,000 naturalistic images.
 
 
@@ -179,7 +179,8 @@ If you use the Neural Encoding Dataset, please cite:
 [prepare_data]: https://github.com/gifale95/NED/tree/main/ned_creation_code/00_prepare_data
 [train_encoding]: https://github.com/gifale95/NED/tree/main/ned_creation_code/01_train_encoding_models
 [test_encoding]: https://github.com/gifale95/NED/tree/main/ned_creation_code/02_test_encoding_models
-[synthesize]: https://github.com/gifale95/NED/tree/main/ned_creation_code/03_synthesize_neural_responses
+[metadata]: https://github.com/gifale95/NED/tree/main/ned_creation_code/03_create_metadata
+[synthesize]: https://github.com/gifale95/NED/tree/main/ned_creation_code/04_synthesize_neural_responses
 
 
 
