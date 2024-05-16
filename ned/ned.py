@@ -355,8 +355,8 @@ class NED():
 		"""
 		Get the metadata, consisting in information on the neural data used to
 		train the encoding models (e.g., the amount of fMRI voxels or EEG time
-		points), and on the trained encoding models (e.g., which data was used
-		to train and test the models, and the models accuracy scores).
+		points), and on the trained encoding models (e.g., how was the data
+		split to train and test the models, and the models accuracy scores).
 
 		Parameters
 		----------
@@ -438,8 +438,7 @@ class NED():
 	def load_synthetic_neural_responses(self, modality, train_dataset, model,
 		imageset, subject, roi=None, return_metadata=True):
 		"""
-		Load the NED's synthetic neural responses, and optionally their
-		metadata.
+		Load NED's synthetic neural responses, and optionally their metadata.
 
 		Parameters
 		----------

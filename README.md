@@ -40,7 +40,7 @@ Following is a table with the encoding models available in the Neural Encoding D
 * **train_dataset:** the neural dataset on which the encoding model was trained.
 * **model:** the type of encoding model used.
 * **subject:** independent subjects on which encoding models were trained (a separate encoding model is trained for each subject).
-* **roi:** independent Regions of Interest (ROIs) on which encoding models were trained (a separate encoding model is trained for each ROI). This only applies to fMRI data.
+* **roi:** independent Regions of Interest (ROIs) on which encoding models were trained (a separate encoding model is trained for each ROI). This only applies to fMRI neural data modality.
 
 | modality | train_dataset | model | subject | roi |
 |-------------|-----------------------|----------| ----------| ----|
@@ -69,11 +69,45 @@ ned_object = NED(ned_dir)
 The `encode` method will synthesize fMRI or EEG responses to any image of your choice, and optionally return the corresponding metadata (i.e., information on the neural data used to train the encoding models such as the amount of fMRI voxels or EEG time points, and on the trained encoding models, such as which data was used to train and test the models, or the models accuracy scores). You can find more information on the input parameters and output of the `encode` method in its [documentation string][encode_doc].
 
 ```python
-# The 'images' input variable consists in the images for which the neural
-# responses are synthesized. It must be a 4-D numpy array of shape
-# (Batch size x 3 RGB Channels x Width x Height), consisting of integer values
-# in the range 0/255. Furthermore, the images must be of square size
-# (i.e., equal width and height).
+"""
+Synthesize neural responses for arbitrary stimulus images, and
+optionally return the synthetic fMRI metadata.
+
+Parameters
+----------
+images : int
+	Images for which the neural responses are synthesized. Must be a 4-D
+	numpy array of shape (Batch size x 3 RGB Channels x Width x Height)
+	consisting of integer values in the range 0/255. Furthermore, the
+	images must be of square size (i.e., equal width and height).
+modality : str
+	Neural data modality.
+train_dataset : str
+	Name of the neural dataset used to train the encoding models.
+model : str
+	Encoding model type used to synthesize the neural responses.
+subject : int
+	Subject number for which the neural responses are synthesized.
+roi : str
+	Only required if modality=='fmri'. Name of the Region of Interest
+	(ROI) for which the fMRI image responses are synthesized.
+return_metadata : bool
+	If True, return medatata along with the synthetic neural responses.
+device : str
+	Whether to work on the 'cpu' or 'cuda'. If 'auto', the code will
+	use GPU if available, and otherwise CPU.
+
+Returns
+-------
+synthetic_neural_responses : float
+	Synthetic neural responses for the input stimulus images.
+	If modality=='fmri', the neural response will be of shape:
+	(Images x N ROI Voxels).
+	If modality=='eeg', the neural response will be of shape:
+	(Images x Repetitions x EEG Channels x EEG time points) if
+metadata : dict
+	Synthetic neural responses metadata.
+"""
 
 # Encode fMRI responses to images
 encoded_fmri, fmri_metadata = ned_object.encode(
@@ -105,6 +139,47 @@ encode_eeg, eeg_metadata = ned_object.encode(
 The `load_synthetic_neural_responses` method will pre-generated synthetic fMRI or EEG responses for ~150,000 naturalistic images (either 73,000 images from the Natural Scenes Dataset, 26,107 images from the THINGS Database, or 50,000 images from the ImageNet 2012 Challenge validation split), and optionally return the corresponding metadata. You can find more information on the input parameters and output of the `load_synthetic_neural_responses` method in its [documentation string][load_synthetic_doc].
 
 ```python
+"""
+Load NED's synthetic neural responses, and optionally their metadata.
+
+Parameters
+----------
+modality : str
+	Neural data modality.
+train_dataset : str
+	Name of the neural dataset used to train the encoding models.
+model : str
+	Encoding model type used to synthesize the fMRI responses.
+imageset : str
+	If 'nsd', load synthetic neural responses for the 73,000 NSD images
+	(Allen et al., 2023).
+	If 'imagenet_val', load synthetic neural responses for the 50,000
+	ILSVRC-2012 validation images (Russakovsky et al., 2015).
+	If 'things', load synthetic neural responses for the 26,107 images
+	from the THINGS database (Hebart et al., 2019).
+	Imageset for which the fMRI responses are synthesized. Available
+	options are 'nsd', 'imagenet_val' and 'things'.
+subject : int
+	Subject number for which the fMRI image responses are synthesized.
+roi : str
+	Only required if modality=='fmri'. Name of the Region of Interest
+	(ROI) for which the fMRI image responses are synthesized.
+return_metadata : bool
+	If True, return fMRI medatata along with the synthetic fMRI
+	responses.
+
+Returns
+-------
+synthetic_neural_responses : h5py
+	Synthetic neural responses for the input stimulus images.
+	If modality=='fmri', the neural response will be of shape:
+	(Images x N ROI Voxels).
+	If modality=='eeg', the neural response will be of shape:
+	(Images x Repetitions x EEG Channels x EEG time points) if
+metadata : dict
+	Synthetic neural responses metadata.
+"""
+
 # Load synthetic fMRI responses
 synthetic_fmri, fmri_metadata = ned_object.load_synthetic_neural_responses(
 	modality='fmri', # required
