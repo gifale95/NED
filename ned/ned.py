@@ -417,7 +417,7 @@ class NED():
 
 		### Metadata directories ###
 		parent_dir = os.path.join(self.ned_dir, 'encoding_models',
-			'modality-'+modality, 'training_dataset-'+train_dataset, 'model-'+
+			'modality-'+modality, 'train_dataset-'+train_dataset, 'model-'+
 			model, 'metadata')
 
 		if modality == 'fmri':
@@ -529,7 +529,7 @@ class NED():
 
 		### Synthetic neural responses directories ###
 		parent_dir = os.path.join(self.ned_dir, 'synthetic_neural_responses',
-			'modality-'+modality, 'training_dataset-'+train_dataset, 'model-'+
+			'modality-'+modality, 'train_dataset-'+train_dataset, 'model-'+
 			model, 'imageset-'+imageset)
 			
 		if modality == 'fmri':

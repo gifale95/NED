@@ -37,12 +37,12 @@ To use `NED` you first need to download the Neural Encoding Dataset from [here][
 Following is a table with the encoding models available in the Neural Encoding Dataset. Each row corresponds to a different encoding model, and the columns indicate their *attributes*:
 
 * **modality:** the neural data modality on which the encoding model was trained.
-* **training_dataset:** the neural dataset on which the encoding model was trained.
+* **train_dataset:** the neural dataset on which the encoding model was trained.
 * **model:** the type of encoding model used.
 * **subject:** independent subjects on which encoding models were trained (a separate encoding model is trained for each subject).
 * **roi:** independent Regions of Interest (ROIs) on which encoding models were trained (a separate encoding model is trained for each ROI). This only applies to fMRI data.
 
-| modality | training_dataset | model | subject | roi |
+| modality | train_dataset | model | subject | roi |
 |-------------|-----------------------|----------| ----------| ----|
 | fmri | nsd | fwrf | 1, 2, 3, 4, 5, 6, 7, 8 | V1, V2, V3, V4, EBA, FBA-2, OFA, FFA-1, FFA-2, PPA, RSC, OPA, OWFA, VWFA-1, VWFA-2, mfs-words, early, midventral, midlateral, midparietal, parietal, lateral, ventral|
 | eeg | things_eeg_2 | vit_b_32 | 1, 2, 3, 4, 5, 6, 7, 8, 9, 10| – |

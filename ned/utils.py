@@ -63,14 +63,14 @@ def fmri_nsd_fwrf(ned_dir, images, subject, roi, device):
 	# Trained model directory
 	if roi in ['lateral', 'ventral']:
 		model_dir_1 = os.path.join(ned_dir, 'encoding_models', 'modality-fmri',
-			'training_dataset-nsd', 'model-fwrf', 'encoding_models_weights',
+			'train_dataset-nsd', 'model-fwrf', 'encoding_models_weights',
 			'weights_'+'sub-'+format(subject,'02')+'_roi-'+roi+'_split-1'+'.pt')
 		model_dir_2 = os.path.join(ned_dir, 'encoding_models', 'modality-fmri',
-			'training_dataset-nsd', 'model-fwrf', 'encoding_models_weights',
+			'train_dataset-nsd', 'model-fwrf', 'encoding_models_weights',
 			'weights_'+'sub-'+format(subject,'02')+'_roi-'+roi+'_split-2'+'.pt')
 	else:
 		model_dir = os.path.join(ned_dir, 'encoding_models', 'modality-fmri',
-			'training_dataset-nsd', 'model-fwrf', 'encoding_models_weights',
+			'train_dataset-nsd', 'model-fwrf', 'encoding_models_weights',
 			'weights_'+'sub-'+format(subject,'02')+'_roi-'+roi+'.pt')
 
 	# Load the model
@@ -235,7 +235,7 @@ def eeg_things_eeg_2_vit_b_32(ned_dir, images, subject, device):
 
 	### Get the EEG channels and time points dimensions ###
 	metadata_dir = os.path.join(ned_dir, 'encoding_models', 'modality-eeg',
-		'training_dataset-things_eeg_2', 'model-vit_b_32',
+		'train_dataset-things_eeg_2', 'model-vit_b_32',
 		'metadata', 'metadata_sub-'+format(subject,'02')+'.npy')
 	metadata = np.load(metadata_dir, allow_pickle=True).item()
 	ch_names = metadata['eeg']['ch_names']
@@ -265,12 +265,12 @@ def eeg_things_eeg_2_vit_b_32(ned_dir, images, subject, device):
 	### Load the scaler and PCA weights ###
 	# Scaler
 	weights_dir = os.path.join(ned_dir, 'encoding_models', 'modality-eeg',
-		'training_dataset-things_eeg_2', 'model-vit_b_32',
+		'train_dataset-things_eeg_2', 'model-vit_b_32',
 		'encoding_models_weights', 'StandardScaler_param.joblib')
 	scaler = load(weights_dir)
 	# PCA
 	weights_dir = os.path.join(ned_dir, 'encoding_models', 'modality-eeg',
-		'training_dataset-things_eeg_2', 'model-vit_b_32',
+		'train_dataset-things_eeg_2', 'model-vit_b_32',
 		'encoding_models_weights', 'pca_param.joblib')
 	pca = load(weights_dir)
 
@@ -310,7 +310,7 @@ def eeg_things_eeg_2_vit_b_32(ned_dir, images, subject, device):
 
 	### Load the trained regression weights ###
 	weights_dir = os.path.join(ned_dir, 'encoding_models', 'modality-eeg',
-		'training_dataset-things_eeg_2', 'model-vit_b_32',
+		'train_dataset-things_eeg_2', 'model-vit_b_32',
 		'encoding_models_weights', 'LinearRegression_param_sub-'+
 		format(subject, '02')+'.joblib')
 	regression_weights = load(weights_dir)
