@@ -66,7 +66,7 @@ ned_object = NED(ned_dir)
 ```
 #### 🔹 Synthesize Neural Responses to any Image of Your Choice
 
-The `encode` method will synthesize fMRI or EEG responses to any image of your choice, and optionally return the corresponding metadata (i.e., information on the neural data used to train the encoding models such as the amount of fMRI voxels or EEG time points, and on the trained encoding models, such as which data was used to train and test the models, or the models accuracy scores). You can find more information on the input parameters and output of the `encode` method in its [documentation string][encode_doc].
+The `encode` method will synthesize fMRI or EEG responses to any image of your choice, and optionally return the corresponding metadata (i.e., information on the neural data used to train the encoding models such as the amount of fMRI voxels or EEG time points, and on the trained encoding models, such as which data was used to train and test the models, or the models accuracy scores).
 
 ```python
 """
@@ -136,7 +136,7 @@ encode_eeg, eeg_metadata = ned_object.encode(
 
 #### 🔹 Load the Pre-Generated Synthetic Neural Responses
 
-The `load_synthetic_neural_responses` method will pre-generated synthetic fMRI or EEG responses for ~150,000 naturalistic images (either 73,000 images from the Natural Scenes Dataset, 26,107 images from the THINGS Database, or 50,000 images from the ImageNet 2012 Challenge validation split), and optionally return the corresponding metadata. You can find more information on the input parameters and output of the `load_synthetic_neural_responses` method in its [documentation string][load_synthetic_doc].
+The `load_synthetic_neural_responses` method will pre-generated synthetic fMRI or EEG responses for ~150,000 naturalistic images (either 73,000 images from the Natural Scenes Dataset, 26,107 images from the THINGS Database, or 50,000 images from the ImageNet 2012 Challenge validation split), and optionally return the corresponding metadata.
 
 ```python
 """
@@ -207,7 +207,7 @@ synthetic_eeg, eeg_metadata = ned_object.load_synthetic_neural_responses(
 
 To familiarize with the Neural Encoding Dataset we created tutorials for both fMRI and EEG modalities. In these tutorial you will learn how to use `NED`'s functions, for example to synthesize fMRI and EEG responses for images of your choice, and you will also familiarize with the pre-generated synthetic fMRI and EEG responses for ~150,000 naturalistic images.
 
-These tutorials are available on either [Colab][colab] or [Jupyter Notebook][jupyter].
+These tutorials are available on either Google Colab ([fMRI tutorial][fmri_tutorial_colab], [EEG tutorial][eeg_tutorial_colab]) or Jupyter Notebook ([fMRI tutorial][fmri_tutorial_jupyter], [EEG tutorial][eeg_tutorial_jupyter]).
 
 
 
@@ -248,8 +248,10 @@ If you use the Neural Encoding Dataset, please cite:
 [data_manual]: https://docs.google.com/document/d/1DeQwjq96pTkPEnqv7V6q9g_NTHCjc6aYr6y3wPlwgDE/edit?usp=drive_link
 [encode_doc]: https://github.com/gifale95/NED/blob/main/ned/ned.py#L205
 [load_synthetic_doc]: https://github.com/gifale95/NED/blob/main/ned/ned.py#L438
-[colab]: https://drive.google.com/drive/folders/13aTI5eSK4yDosi63OfsyN20fLo6T5uNj?usp=drive_link
-[jupyter]: https://github.com/gifale95/NED/tree/main/tutorials
+[fmri_tutorial_colab]: https://colab.research.google.com/drive/1W9Sroz2Y0eTYfyhVrAJwe50GGHHAGBdE?usp=drive_link
+[eeg_tutorial_colab]: https://colab.research.google.com/drive/10NSRBrJ390vuaPyRWq5fDBIA4NNAUlTk?usp=drive_link
+[fmri_tutorial_jupyter]: https://github.com/gifale95/NED/blob/main/tutorials/ned_fmri_tutorial.ipynb
+[eeg_tutorial_jupyter]: https://github.com/gifale95/NED/blob/main/tutorials/ned_eeg_tutorial.ipynb
 [ned_creation_code]: https://github.com/gifale95/NED/tree/main/ned_creation_code/
 [prepare_data]: https://github.com/gifale95/NED/tree/main/ned_creation_code/00_prepare_data
 [train_encoding]: https://github.com/gifale95/NED/tree/main/ned_creation_code/01_train_encoding_models
