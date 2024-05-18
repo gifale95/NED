@@ -5,7 +5,6 @@ numpy
 Pillow
 scipy
 scikit-learn
-struct
 torch
 torchvision
 tqdm
