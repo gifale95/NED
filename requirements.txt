@@ -1,4 +1,3 @@
-copy
 h5py
 joblib
 math
