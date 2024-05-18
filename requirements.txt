@@ -4,7 +4,7 @@ nibabel
 numpy
 Pillow
 scipy
-sklearn
+scikit-learn
 struct
 torch
 torchvision
