@@ -1,6 +1,5 @@
 h5py
 joblib
-math
 nibabel
 numpy
 pickle
