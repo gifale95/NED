@@ -49,7 +49,7 @@ parser.add_argument('--ned_dir', default='../neural_encoding_dataset', type=str)
 parser.add_argument('--nsd_dir', default='../natural-scenes-dataset', type=str)
 args = parser.parse_args()
 
-print('>>> compute encoding accuracy <<<')
+print('>>> Compute encoding accuracy <<<')
 print('\nInput parameters:')
 for key, val in vars(args).items():
 	print('{:16} {}'.format(key, val))
@@ -100,7 +100,7 @@ noise_normalized_encoding = {}
 
 
 # =============================================================================
-# Set random seeds to make results reproducible
+# Loop over subjects and ROIs
 # =============================================================================
 for sub in tqdm(args.all_subs, leave=False):
 	for r in args.all_rois:
