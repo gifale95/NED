@@ -78,16 +78,12 @@ colors = [(170/255, 118/255, 186/255)]
 # =============================================================================
 # Plot the voxel number
 # =============================================================================
-rois = ['V1', 'V2', 'V3', 'V4', 'EBA', 'FBA-2', 'OFA', 'FFA-1', 'FFA-2',
-	'PPA', 'RSC', 'OPA', 'OWFA', 'VWFA-1', 'VWFA-2', 'mfs-words', 'early',
-	'midventral', 'midlateral', 'midparietal', 'parietal', 'lateral', 'ventral']
-
 fig, axs = plt.subplots(nrows=4, ncols=6, sharex=True, sharey=True)
 axs = np.reshape(axs, (-1))
 x = np.arange(len(voxel_num))
 width = 0.4
 
-for r, roi in enumerate(rois):
+for r, roi in enumerate(args.all_rois):
 
 	# Plot the encoding accuracies
 	axs[r].bar(x, voxel_num[:,r], width=width, color=colors[0])
@@ -103,8 +99,6 @@ for r, roi in enumerate(rois):
 			fontsize=fontsize)
 		yticks = np.arange(0, 101, 20)
 		ylabels = np.arange(0, 101, 20)
-#		plt.yticks(ticks=yticks, labels=ylabels)
-#	axs[r].set_ylim(bottom=0, top=100)
 
 	# x-axis
 	if r in [18, 19, 20, 21, 22, 23]:
@@ -112,7 +106,6 @@ for r, roi in enumerate(rois):
 		xticks = x
 		xlabels = ['1', '2', '3', '4', '5', '6', '7', '8']
 		plt.xticks(ticks=xticks, labels=xlabels, fontsize=fontsize)
-#	axs[r].set_xlim(left=0, right=80)
 
 	# Title
 	axs[r].set_title(roi, fontsize=fontsize)
@@ -121,4 +114,3 @@ for r, roi in enumerate(rois):
 axs[23].set_xlabel('Subjects', fontsize=fontsize)
 
 #plt.savefig('encoding_models_prediction_accuracy_all_rois_bar', dpi=600)
-

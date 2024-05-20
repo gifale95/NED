@@ -92,16 +92,12 @@ colors = [(170/255, 118/255, 186/255)]
 # =============================================================================
 # Plot the encoding accuracy results
 # =============================================================================
-rois = ['V1', 'V2', 'V3', 'V4', 'EBA', 'FBA-2', 'OFA', 'FFA-1', 'FFA-2',
-	'PPA', 'RSC', 'OPA', 'OWFA', 'VWFA-1', 'VWFA-2', 'mfs-words', 'early',
-	'midventral', 'midlateral', 'midparietal', 'parietal', 'lateral', 'ventral']
-
 fig, axs = plt.subplots(nrows=4, ncols=6, sharex=True, sharey=True)
 axs = np.reshape(axs, (-1))
 x = np.arange(len(acc))
 width = 0.4
 
-for r, roi in enumerate(rois):
+for r, roi in enumerate(args.all_rois):
 
 	# Plot the encoding accuracies
 	axs[r].bar(x, acc[:,r], width=width, color=colors[0])
@@ -110,10 +106,6 @@ for r, roi in enumerate(rois):
 	y = np.mean(acc[:,r], 0)
 	axs[r].plot([min(x), max(x)], [y, y], '--', color='k', linewidth=2,
 		alpha=0.4, label='Subjects mean')
-
-	# Plot the confidence intervals
-#	axs[r].errorbar(x[-1], acc[-1,r], yerr=np.reshape(ci[:,r], (-1, 1)),
-#		fmt="none", ecolor="k", elinewidth=2, capsize=4)
 
 	# y-axis
 	if r in [0, 6, 12, 18]:
@@ -130,7 +122,6 @@ for r, roi in enumerate(rois):
 		xticks = x
 		xlabels = ['1', '2', '3', '4', '5', '6', '7', '8']
 		plt.xticks(ticks=xticks, labels=xlabels, fontsize=fontsize)
-#	axs[r].set_xlim(left=0, right=80)
 
 	# Title
 	axs[r].set_title(roi, fontsize=fontsize)
@@ -140,4 +131,3 @@ axs[23].set_xlabel('Subjects', fontsize=fontsize)
 
 #plt.savefig('encoding_accuracy_bar_train_dataset-nsd', dpi=600)
 #plt.savefig('encoding_accuracy_bar_train_dataset-nsd.svg')
-

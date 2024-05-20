@@ -68,10 +68,6 @@ colors = [(170/255, 118/255, 186/255)]
 # =============================================================================
 # Plot the encoding accuracy results
 # =============================================================================
-rois = ['V1', 'V2', 'V3', 'V4', 'EBA', 'FBA-2', 'OFA', 'FFA-1', 'FFA-2',
-	'PPA', 'RSC', 'OPA', 'OWFA', 'VWFA-1', 'VWFA-2', 'mfs-words', 'early',
-	'midventral', 'midlateral', 'midparietal', 'parietal', 'lateral', 'ventral']
-
 fig, axs = plt.subplots(nrows=4, ncols=6, sharex=True, sharey=True)
 axs = np.reshape(axs, (-1))
 
@@ -85,7 +81,6 @@ for r, roi in enumerate(args.all_rois):
 
 	if r in [0, 6, 12, 18]:
 		axs[r].set_ylabel('Voxels\nprobability density', fontsize=fontsize)
-#		plt.yticks(ticks=ticks, labels=labels)
 	axs[r].set_ylim(bottom=0, top=.1)
 
 	# x-axis
@@ -97,7 +92,7 @@ for r, roi in enumerate(args.all_rois):
 	axs[r].set_xlim(left=0, right=100)
 
 	# Title
-	axs[r].set_title(rois[r], fontsize=fontsize)
+	axs[r].set_title(roi, fontsize=fontsize)
 
 # y-axis
 axs[23].set_xlabel('Explained variance (%)', fontsize=fontsize)
@@ -119,4 +114,3 @@ axs[23].set_xlabel('Explained variance (%)', fontsize=fontsize)
 #plt.savefig('encoding_accuracy_hist_train_dataset-nsd_sub-06.svg')
 #plt.savefig('encoding_accuracy_hist_train_dataset-nsd_sub-07.svg')
 #plt.savefig('encoding_accuracy_hist_train_dataset-nsd_sub-08.svg')
-

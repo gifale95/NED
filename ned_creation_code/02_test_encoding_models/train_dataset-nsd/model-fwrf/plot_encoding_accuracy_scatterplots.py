@@ -81,10 +81,6 @@ colors = [(170/255, 118/255, 186/255)]
 # =============================================================================
 # Plot the encoding accuracy results
 # =============================================================================
-rois = ['V1', 'V2', 'V3', 'V4', 'EBA', 'FBA-2', 'OFA', 'FFA-1', 'FFA-2',
-	'PPA', 'RSC', 'OPA', 'OWFA', 'VWFA-1', 'VWFA-2', 'mfs-words', 'early',
-	'midventral', 'midlateral', 'midparietal', 'parietal', 'lateral', 'ventral']
-
 fig, axs = plt.subplots(nrows=4, ncols=6, sharex=True, sharey=True)
 axs = np.reshape(axs, (-1))
 
@@ -96,8 +92,6 @@ for r, roi in enumerate(args.all_rois):
 
 	# Plot the results
 	axs[r].scatter(nc[roi], r2[roi], color=colors[0], alpha=.3)
-#	axs[r].scatter(np.mean(nc[roi]), np.mean(r2[roi]), s=50, color='r',
-#		marker='P')
 	axs[r].set_aspect('equal')
 
 	# y-axis
@@ -115,7 +109,7 @@ for r, roi in enumerate(args.all_rois):
 	axs[r].set_xlim(left=-.1, right=.9)
 
 	# Title
-	axs[r].set_title(rois[r], fontsize=fontsize)
+	axs[r].set_title(roi, fontsize=fontsize)
 
 # y-axis
 axs[23].set_xlabel('Noise ceiling', fontsize=fontsize)
