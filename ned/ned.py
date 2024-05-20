@@ -193,7 +193,7 @@ class NED():
 
 		### List ROIs ###
 		if train_dataset == 'nsd':
-			rois = ['V1', 'V2', 'V3', 'V4', 'EBA', 'FBA-2', 'OFA', 'FFA-1',
+			rois = ['V1', 'V2', 'V3', 'hV4', 'EBA', 'FBA-2', 'OFA', 'FFA-1',
 				'FFA-2', 'PPA', 'RSC', 'OPA', 'OWFA', 'VWFA-1', 'VWFA-2',
 				'mfs-words', 'early', 'midventral', 'midlateral', 'midparietal',
 				'parietal', 'lateral', 'ventral']
