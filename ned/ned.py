@@ -277,7 +277,7 @@ class NED():
 			raise ValueError(f"'model' value must be one of the following: {models}!")
 
 		# subject
-		if isinstance(subject, (int, np.integer)):
+		if not(isinstance(subject, (int, np.integer))):
 			raise TypeError("'subject' must be of type int!")
 		subjects = self.which_subjects(modality, train_dataset)
 		if subject not in subjects:
@@ -401,7 +401,7 @@ class NED():
 			raise ValueError(f"'model' value must be one of the following: {models}!")
 
 		# subject
-		if isinstance(subject, (int, np.integer)):
+		if not(isinstance(subject, (int, np.integer))):
 			raise TypeError("'subject' must be of type int!")
 		subjects = self.which_subjects(modality, train_dataset)
 		if subject not in subjects:
@@ -508,7 +508,7 @@ class NED():
 			raise ValueError(f"'imageset' value must be one of the following: {imagesets}!")
 
 		# subject
-		if isinstance(subject, (int, np.integer)):
+		if not(isinstance(subject, (int, np.integer))):
 			raise TypeError("'subject' must be of type int!")
 		subjects = self.which_subjects(modality, train_dataset)
 		if subject not in subjects:
