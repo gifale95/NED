@@ -333,8 +333,7 @@ save_dir = os.path.join(args.ned_dir, 'synthetic_neural_responses',
 if os.path.isdir(save_dir) == False:
 	os.makedirs(save_dir)
 
-file_name = 'synthetic_neural_responses_training_dataset-nsd_model-fwrf_' + \
-	'imageset-' + args.imageset + '_sub-' + format(args.sub, '02') + \
+file_name = 'synthetic_neural_responses_sub-' + format(args.sub, '02') + \
 	'_roi-' + args.roi + '.h5'
 
 # Save the h5py file
@@ -421,8 +420,7 @@ if args.imageset == 'things':
 # =============================================================================
 # Save the metadata
 # =============================================================================
-file_name = 'synthetic_neural_responses_metadata_training_dataset-' + \
-	'nsd_model-fwrf_imageset-' + args.imageset + '_sub-' + \
+file_name = 'synthetic_neural_responses_metadata_sub-' + \
 	format(args.sub, '02') + '_roi-' + args.roi
 
 np.save(os.path.join(save_dir, file_name), metadata)

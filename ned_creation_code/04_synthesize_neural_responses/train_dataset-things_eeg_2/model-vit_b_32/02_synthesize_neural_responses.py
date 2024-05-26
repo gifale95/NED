@@ -120,9 +120,7 @@ save_dir = os.path.join(args.ned_dir, 'synthetic_neural_responses',
 if os.path.isdir(save_dir) == False:
 	os.makedirs(save_dir)
 
-file_name = 'synthetic_neural_responses_training_dataset-things_eeg_2_' + \
-	'model-vit_b_32_imageset-' + args.imageset + '_sub-' + \
-	format(args.sub, '02') + '.h5'
+file_name = 'synthetic_neural_responses_sub-' + format(args.sub, '02') + '.h5'
 
 # Save the h5py file
 with h5py.File(os.path.join(save_dir, file_name), 'w') as f:
@@ -212,9 +210,7 @@ if args.imageset == 'things':
 # =============================================================================
 # Save the metadata
 # =============================================================================
-file_name = 'synthetic_neural_responses_metadata_training_dataset-' + \
-	'things_eeg_2_model-vit_b_32_imageset-' + args.imageset + '_sub-' + \
-	format(args.sub, '02')
+file_name = 'synthetic_neural_responses_metadata_sub-' + format(args.sub, '02')
 
 np.save(os.path.join(save_dir, file_name), metadata)
 

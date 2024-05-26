@@ -532,14 +532,12 @@ class NED():
 			model, 'imageset-'+imageset)
 			
 		if modality == 'fmri':
-			file_name = 'synthetic_neural_responses_training_dataset-' + \
-				train_dataset + '_model-' + model + '_imageset-' + imageset + \
-				'_sub-' + format(subject, '02') + '_roi-' + roi + '.h5'
+			file_name = 'synthetic_neural_responses_sub-' + \
+				format(subject, '02') + '_roi-' + roi + '.h5'
 
 		elif modality == 'eeg':
-			file_name = 'synthetic_neural_responses_training_dataset-' + \
-				train_dataset + '_model-' + model + '_imageset-' + imageset + \
-				'_sub-' + format(subject, '02') +'.h5'
+			file_name = 'synthetic_neural_responses_sub-' + \
+				format(subject, '02') +'.h5'
 
 		### Load NED's synthetic neural responses ###
 		synthetic_neural_responses = h5py.File(os.path.join(parent_dir,
@@ -548,14 +546,10 @@ class NED():
 		### Metadata directories ###
 		if return_metadata == True:
 			if modality == 'fmri':
-				file_name = 'synthetic_neural_responses_metadata_' + \
-					'training_dataset-' + train_dataset + '_model-' + model + \
-					'_imageset-' + imageset + '_sub-' + \
+				file_name = 'synthetic_neural_responses_metadata_sub-' + \
 					format(subject,'02') + '_roi-' + roi + '.npy'
 			elif modality == 'eeg':
-				file_name = 'synthetic_neural_responses_metadata_' + \
-					'training_dataset-' + train_dataset + '_model-' + model + \
-					'_imageset-' + imageset + '_sub-' + \
+				file_name = 'synthetic_neural_responses_metadata_sub-' + \
 					format(subject,'02') + '.npy'
 
 		### Load the metadata ###
