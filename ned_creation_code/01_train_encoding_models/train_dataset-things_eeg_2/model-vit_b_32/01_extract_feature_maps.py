@@ -131,7 +131,7 @@ del fmaps_train
 
 
 # =============================================================================
-# Extract the THINGS EEG2 train image features
+# Extract the THINGS EEG2 test image features
 # =============================================================================
 # Image directories
 img_dir = os.path.join(args.things_eeg_2_dir, 'image_set', 'test_images')
