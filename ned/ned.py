@@ -449,14 +449,14 @@ class NED():
 		model : str
 			Encoding model type used to synthesize the fMRI responses.
 		imageset : str
+			Imageset for which the fMRI responses are synthesized. Available
+			options are 'nsd', 'imagenet_val' and 'things'.
 			If 'nsd', load synthetic neural responses for the 73,000 NSD images
 			(Allen et al., 2023).
 			If 'imagenet_val', load synthetic neural responses for the 50,000
 			ILSVRC-2012 validation images (Russakovsky et al., 2015).
 			If 'things', load synthetic neural responses for the 26,107 images
 			from the THINGS database (Hebart et al., 2019).
-			Imageset for which the fMRI responses are synthesized. Available
-			options are 'nsd', 'imagenet_val' and 'things'.
 		subject : int
 			Subject number for which the fMRI image responses are synthesized.
 		roi : str
