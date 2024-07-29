@@ -32,6 +32,8 @@ You will additionally need to install the Python dependencies found in [requirem
 
 To use `NED` you first need to download the Neural Encoding Dataset from [here][ned_data]. Depending on how you want to use the Neural Encoding Dataset, you might need to download all of it, or only parts of it. For this please refer to the [data manual][data_manual], which describes how the Neural Encoding Dataset is structured.
 
+We recommend downloading the dataset directly from Google Drive via terminal using [Rclone][rclone]. [Here][guide] is a step-by-step guide for how to install and use Rclone to move files to and from your Google Drive. Before downloading NED via terminal you need to add a shortcut of the `neural_encoding_dataset` folder to your Google Drive. You can do this by right-clicking on the `neural_encoding_dataset` folder, and selecting `Organise` → `Add shortcut`. This will create a shortcut (without copying or taking space) of the folder to a desired path in your Google Drive, from which you can download its content.
+
 ### 🧠 Available Encoding Models
 
 Following is a table with the encoding models available in the Neural Encoding Dataset. Each row corresponds to a different encoding model, and the columns indicate their *attributes*:
@@ -244,6 +246,8 @@ If you use the Neural Encoding Dataset, please cite:
 [nsd]: https://naturalscenesdataset.org/
 [allen]: https://www.nature.com/articles/s41593-021-00962-x
 [requirements]: https://github.com/gifale95/NED/blob/main/requirements.txt
+[rclone]: https://rclone.org/
+[guide]: https://noisyneuron.github.io/nyu-hpc/transfer.html
 [ned_data]: https://forms.gle/ZKxEcjBmdYL6zdrg9
 [data_manual]: https://docs.google.com/document/d/1DeQwjq96pTkPEnqv7V6q9g_NTHCjc6aYr6y3wPlwgDE/edit?usp=drive_link
 [encode_doc]: https://github.com/gifale95/NED/blob/main/ned/ned.py#L205
