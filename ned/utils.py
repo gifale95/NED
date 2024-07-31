@@ -16,7 +16,7 @@ from ned.models.fwrf.torch_gnet import Encoder
 from ned.models.fwrf.torch_mpf import Torch_LayerwiseFWRF
 
 
-def get_model_fmri_nsd_fwrf(ned_dir, subject, roi, trained, device):
+def get_model_fmri_nsd_fwrf(ned_dir, subject, roi, device):
 	"""
 	Load the feature-weighted receptive field (fwrf) encoding model
 	(St-Yves & Naselaris, 2018).
@@ -43,10 +43,6 @@ def get_model_fmri_nsd_fwrf(ned_dir, subject, roi, trained, device):
 	roi : str
 		Only required if modality=='fmri'. Name of the Region of Interest
 		(ROI) for which the fMRI encoding model was trained.
-	trained : bool
-		If True, load a trained encoding model, that is, a model with a
-		trained backbone feature extractor. If False, the model's backbone
-		feature extractor is randomly initialized.
 	device : str
 		Whether the encoding model is stored on the 'cpu' or 'cuda'. If 'auto',
 		the code will use GPU if available, and otherwise CPU.
@@ -132,22 +128,17 @@ def get_model_fmri_nsd_fwrf(ned_dir, subject, roi, trained, device):
 			dtype=np.float32).to(device) for s in [subject]}
 
 	### Load the pretrained weights into the model ###
-	# If trained == True, use randomly initialized backbone feature extractors
-	# (shared_model), and only load the trained mapping from model feature space
-	# to voxel space.
 	if roi in ['lateral', 'ventral']:
-		if trained == True:
-			shared_model_1.load_state_dict(
-				trained_model_1['best_params']['enc'])
-			shared_model_2.load_state_dict(
-				trained_model_2['best_params']['enc'])
+		shared_model_1.load_state_dict(
+			trained_model_1['best_params']['enc'])
+		shared_model_2.load_state_dict(
+			trained_model_2['best_params']['enc'])
 		for s,sd in subject_fwrfs_1.items():
 			sd.load_state_dict(trained_model_1['best_params']['fwrfs'][s])
 		for s,sd in subject_fwrfs_2.items():
 			sd.load_state_dict(trained_model_2['best_params']['fwrfs'][s])
 	else:
-		if trained == True:
-			shared_model.load_state_dict(trained_model['best_params']['enc'])
+		shared_model.load_state_dict(trained_model['best_params']['enc'])
 		for s,sd in subject_fwrfs.items():
 			sd.load_state_dict(trained_model['best_params']['fwrfs'][s])
 	if roi in ['lateral', 'ventral']:
@@ -175,8 +166,6 @@ def get_model_fmri_nsd_fwrf(ned_dir, subject, roi, trained, device):
 		encoding_model['shared_model'] = shared_model
 		encoding_model['subject_fwrfs'] = subject_fwrfs
 		encoding_model['nnv'] = nnv
-	encoding_model['subject'] = subject
-	encoding_model['roi'] = roi
 	encoding_model['resize_px'] = resize_px
 
 	### Output ###
@@ -221,8 +210,8 @@ def encode_fmri_nsd_fwrf(encoding_model, images, device):
 	"""
 
 	### Extract model parameters ###
-	subject = encoding_model['subject']
-	roi = encoding_model['roi']
+	subject = encoding_model['args']['subject']
+	roi = encoding_model['args']['roi']
 	resize_px = encoding_model['resize_px']
 
 	### Model functions ###
@@ -279,7 +268,7 @@ def encode_fmri_nsd_fwrf(encoding_model, images, device):
 	return synthetic_fmri_responses
 
 
-def get_model_eeg_things_eeg_2_vit_b_32(ned_dir, subject, trained, device):
+def get_model_eeg_things_eeg_2_vit_b_32(ned_dir, subject, device):
 	"""
 	Load the vision-transformer-based (Dosovitskiy et al., 2020) linearizing
 	encoding model.
@@ -290,10 +279,6 @@ def get_model_eeg_things_eeg_2_vit_b_32(ned_dir, subject, trained, device):
 		Path to the "neural_encoding_dataset" folder.
 	subject : int
 		Subject number for which the encoding model was trained.
-	trained : bool
-		If True, load a trained encoding model, that is, a model with a
-		trained backbone feature extractor. If False, the model's backbone
-		feature extractor is randomly initialized.
 	device : str
 		Whether the encoding model is stored on the 'cpu' or 'cuda'. If 'auto',
 		the code will use GPU if available, and otherwise CPU.

@@ -205,7 +205,7 @@ class NED():
 
 
 	def get_encoding_model(self, modality, train_dataset, model, subject,
-		roi=None, trained=True, device='auto'):
+		roi=None, device='auto'):
 		"""
 		Load the encoding model of interest.
 
@@ -222,10 +222,6 @@ class NED():
 		roi : str
 			Only required if modality=='fmri'. Name of the Region of Interest
 			(ROI) for which the fMRI encoding model was trained.
-		trained : bool
-			If True, load a trained encoding model, that is, a model with a
-			trained backbone feature extractor. If False, the model's backbone
-			feature extractor is randomly initialized.
 		device : str
 			Whether the encoding model is stored on the 'cpu' or 'cuda'. If
 			'auto', the code will use GPU if available, and otherwise CPU.
@@ -273,10 +269,6 @@ class NED():
 			if roi not in rois:
 				raise ValueError(f"'roi' value must be one of the following: {rois}!")
 
-		# trained
-		if type(trained) != bool:
-			raise TypeError("'trained' must be of type bool!")
-
 		# device
 		if type(device) != str:
 			raise TypeError("'device' must be of type str!")
@@ -298,7 +290,6 @@ class NED():
 						self.ned_dir,
 						subject,
 						roi,
-						trained,
 						device
 						)
 
@@ -310,7 +301,6 @@ class NED():
 					encoding_model = get_model_eeg_things_eeg_2_vit_b_32(
 						self.ned_dir,
 						subject,
-						trained,
 						device
 						)
 
@@ -321,7 +311,6 @@ class NED():
 		args['model'] = model
 		args['subject'] = subject
 		args['roi'] = roi
-		args['trained'] = trained
 		encoding_model['args'] = args
 
 		### Output ###
