@@ -55,7 +55,7 @@ For more information on the encoding model's *attributes* (e.g., training datase
 
 #### 🔹 Initialize the NED object
 
-To use `NED`'s functions you will first need to import `NED` and create a `ned_object`.
+To use `NED`'s functions you need to import `NED` and create a `ned_object`.
 
 ```python
 from ned.ned import NED
@@ -68,7 +68,64 @@ ned_object = NED(ned_dir)
 ```
 #### 🔹 Synthesize Neural Responses to any Image of Your Choice
 
-The `encode` method will synthesize fMRI or EEG responses to any image of your choice, and optionally return the corresponding metadata (i.e., information on the neural data used to train the encoding models such as the amount of fMRI voxels or EEG time points, and on the trained encoding models, such as which data was used to train and test the models, or the models accuracy scores).
+Synthesizing neural responses for images involves two steps. You first need to load the neural encoding model of your choice using the `get_encoding_model` method.
+
+```python
+"""
+Load the encoding model of interest.
+
+Parameters
+----------
+modality : str
+	Neural data modality.
+train_dataset : str
+	Name of the neural dataset used to train the encoding models.
+model : str
+	Encoding model type used to synthesize the neural responses.
+subject : int
+	Subject number for which the encoding model was trained.
+roi : str
+	Only required if modality=='fmri'. Name of the Region of Interest
+	(ROI) for which the fMRI encoding model was trained.
+trained : bool
+	If True, load a trained encoding model, that is, a model with a
+	trained backbone feature extractor. If False, the model's backbone
+	feature extractor is randomly initialized.
+device : str
+	Whether the encoding model is stored on the 'cpu' or 'cuda'. If
+	'auto', the code will use GPU if available, and otherwise CPU.
+
+Returns
+-------
+encoding_model : dict
+	Neural encoding model.
+"""
+
+# Load the fMRI encoding model
+fmri_encoding_model = ned_object.get_encoding_model(
+	modality='fmri', # required
+	train_dataset='nsd', # required
+	model='fwrf', # required
+	subject=1, # required
+	roi='V1', # default is None, only required if modality=='fmri'
+	trained=True, # default is True
+	device='auto' # default is 'auto'
+	)
+
+# Load the EEG encoding model
+eeg_encoding_model = ned_object.get_encoding_model(
+	modality='eeg', # required
+	train_dataset='things_eeg_2', # required
+	model='vit_b_32', # required
+	subject=1, # required
+	roi=None, # default is None, only required if modality=='fmri'
+	trained=True, # default is True
+	device='auto' # default is 'auto'
+	)
+
+```
+
+Next, with the `encode` method you can synthesize fMRI or EEG responses to any image of your choice, and optionally return the corresponding metadata (i.e., information on the neural data used to train the encoding models such as the amount of fMRI voxels or EEG time points, and on the trained encoding models, such as which data was used to train and test the models, or the models accuracy scores).
 
 ```python
 """
@@ -77,22 +134,13 @@ optionally return the synthetic fMRI metadata.
 
 Parameters
 ----------
+encoding_model : dict
+	Neural encoding model.
 images : int
 	Images for which the neural responses are synthesized. Must be a 4-D
 	numpy array of shape (Batch size x 3 RGB Channels x Width x Height)
 	consisting of integer values in the range 0/255. Furthermore, the
 	images must be of square size (i.e., equal width and height).
-modality : str
-	Neural data modality.
-train_dataset : str
-	Name of the neural dataset used to train the encoding models.
-model : str
-	Encoding model type used to synthesize the neural responses.
-subject : int
-	Subject number for which the neural responses are synthesized.
-roi : str
-	Only required if modality=='fmri'. Name of the Region of Interest
-	(ROI) for which the fMRI image responses are synthesized.
 return_metadata : bool
 	If True, return medatata along with the synthetic neural responses.
 device : str
@@ -113,24 +161,16 @@ metadata : dict
 
 # Encode fMRI responses to images
 encoded_fmri, fmri_metadata = ned_object.encode(
+	encoding_model, # required
 	images, # required
-	modality='fmri', # required
-	train_dataset='nsd', # required
-	model='fwrf', # required
-	subject=1, # required
-	roi='V1', # default is None, only required if modality=='fmri'
 	return_metadata=True, # default is True
 	device='auto' # default is 'auto'
 	)
 
 # Encode EEG responses to images
-encode_eeg, eeg_metadata = ned_object.encode(
+encoded_eeg, eeg_metadata = ned_object.encode(
+	encoding_model, # required
 	images, # required
-	modality='eeg', # required
-	train_dataset='things_eeg_2', # required
-	model='vit_b_32', # required
-	subject=1, # required
-	roi=None, # default is None, only required if modality='fmri'
 	return_metadata=True, # default is True
 	device='auto' # default is 'auto'
 	)

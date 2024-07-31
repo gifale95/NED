@@ -3,8 +3,10 @@ import numpy as np
 import h5py
 import torch
 
-from ned.utils import fmri_nsd_fwrf
-from ned.utils import eeg_things_eeg_2_vit_b_32
+from ned.utils import get_model_fmri_nsd_fwrf
+from ned.utils import get_model_eeg_things_eeg_2_vit_b_32
+from ned.utils import encode_fmri_nsd_fwrf
+from ned.utils import encode_eeg_things_eeg_2_vit_b_32
 
 
 class NED():
@@ -202,19 +204,13 @@ class NED():
 		return rois
 
 
-	def encode(self, images, modality, train_dataset, model, subject, roi=None,
-		return_metadata=True, device='auto'):
+	def get_encoding_model(self, modality, train_dataset, model, subject,
+		roi=None, trained=True, device='auto'):
 		"""
-		Synthesize neural responses for arbitrary stimulus images, and
-		optionally return the synthetic fMRI metadata.
+		Load the encoding model of interest.
 
 		Parameters
 		----------
-		images : int
-			Images for which the neural responses are synthesized. Must be a 4-D
-			numpy array of shape (Batch size x 3 RGB Channels x Width x Height)
-			consisting of integer values in the range 0/255. Furthermore, the
-			images must be of square size (i.e., equal width and height).
 		modality : str
 			Neural data modality.
 		train_dataset : str
@@ -222,10 +218,131 @@ class NED():
 		model : str
 			Encoding model type used to synthesize the neural responses.
 		subject : int
-			Subject number for which the neural responses are synthesized.
+			Subject number for which the encoding model was trained.
 		roi : str
 			Only required if modality=='fmri'. Name of the Region of Interest
-			(ROI) for which the fMRI image responses are synthesized.
+			(ROI) for which the fMRI encoding model was trained.
+		trained : bool
+			If True, load a trained encoding model, that is, a model with a
+			trained backbone feature extractor. If False, the model's backbone
+			feature extractor is randomly initialized.
+		device : str
+			Whether the encoding model is stored on the 'cpu' or 'cuda'. If
+			'auto', the code will use GPU if available, and otherwise CPU.
+
+		Returns
+		-------
+		encoding_model : dict
+			Neural encoding model.
+		"""
+
+		### Check input ###
+		# modality
+		if type(modality) != str:
+			raise TypeError("'modality' must be of type str!")
+		modalities = self.which_modalities()
+		if modality not in modalities:
+			raise ValueError(f"'modality' value must be one of the following: {modalities}!")
+
+		# train_dataset
+		if type(train_dataset) != str:
+			raise TypeError("'train_dataset' must be of type str!")
+		train_dataset_options = self.which_train_datasets(modality)
+		if train_dataset not in train_dataset_options:
+			raise ValueError(f"'train_dataset' value must be one of the following: {train_dataset_options}!")
+
+		# model
+		if type(model) != str:
+			raise TypeError("'model' must be of type str!")
+		models = self.which_models(modality, train_dataset)
+		if model not in models:
+			raise ValueError(f"'model' value must be one of the following: {models}!")
+
+		# subject
+		if not(isinstance(subject, (int, np.integer))):
+			raise TypeError("'subject' must be of type int!")
+		subjects = self.which_subjects(modality, train_dataset)
+		if subject not in subjects:
+			raise ValueError(f"'subject' value must be one of the following: {subjects}!")
+
+		# roi
+		if modality == 'fmri':
+			if type(roi) != str:
+				raise TypeError("'roi' must be of type str!")
+			rois = self.which_rois(train_dataset)
+			if roi not in rois:
+				raise ValueError(f"'roi' value must be one of the following: {rois}!")
+
+		# trained
+		if type(trained) != bool:
+			raise TypeError("'trained' must be of type bool!")
+
+		# device
+		if type(device) != str:
+			raise TypeError("'device' must be of type str!")
+		device_options = ['cpu', 'cuda', 'auto']
+		if device not in device_options:
+			raise ValueError(f"'device' value must be one of the following: {device_options}!")
+
+		### Select device ###
+		if device == 'auto':
+			device = 'cuda' if torch.cuda.is_available() else 'cpu'
+
+		### Load the encoding models ###
+		if modality == 'fmri':
+			if train_dataset == 'nsd':
+				if model == 'fwrf':
+					# Load the feature-weighted receptive field (fwrf) encoding
+					# model (St-Yves & Naselaris, 2018).
+					encoding_model = get_model_fmri_nsd_fwrf(
+						self.ned_dir,
+						subject,
+						roi,
+						trained,
+						device
+						)
+
+		elif modality == 'eeg':
+			if train_dataset == 'things_eeg_2':
+				if model == 'vit_b_32':
+					# Load the vision-transformer-based (Dosovitskiy et al.,
+					# 2020) linearizing encoding model.
+					encoding_model = get_model_eeg_things_eeg_2_vit_b_32(
+						self.ned_dir,
+						subject,
+						trained,
+						device
+						)
+
+		### Add arguments to the model dictionary ###
+		args = {}
+		args['modality'] = modality
+		args['train_dataset'] = train_dataset
+		args['model'] = model
+		args['subject'] = subject
+		args['roi'] = roi
+		args['trained'] = trained
+		encoding_model['args'] = args
+
+		### Output ###
+		return encoding_model
+
+
+	def encode(self, encoding_model, images, return_metadata=True,
+			device='auto'):
+		"""
+		Synthesize neural responses for arbitrary stimulus images, and
+		optionally return the synthetic fMRI metadata.
+
+		Parameters
+		----------
+		encoding_model : list
+			Neural encoding model.
+		images : int
+			Images for which the neural responses are synthesized. Must be a 4-D
+			numpy array of shape (Batch size x 3 RGB Channels x Width x Height)
+			consisting of integer values in the range 0/255. Furthermore, the
+			images must be of square size (i.e., equal width and height).
 		return_metadata : bool
 			If True, return medatata along with the synthetic neural responses.
 		device : str
@@ -243,6 +360,13 @@ class NED():
 		metadata : dict
 			Synthetic neural responses metadata.
 		"""
+
+		### Extract model parameters ###
+		modality = encoding_model['args']['modality']
+		train_dataset = encoding_model['args']['train_dataset']
+		model = encoding_model['args']['model']
+		subject = encoding_model['args']['subject']
+		roi = encoding_model['args']['roi']
 
 		### Check input ###
 		# images
@@ -313,11 +437,9 @@ class NED():
 					# Synthesize fMRI responses to images using the
 					# feature-weighted receptive field (fwrf) encoding model
 					# (St-Yves & Naselaris, 2018).
-					synthetic_neural_responses = fmri_nsd_fwrf(
-						self.ned_dir,
+					synthetic_neural_responses = encode_fmri_nsd_fwrf(
+						encoding_model,
 						images,
-						subject,
-						roi,
 						device
 						)
 
@@ -327,10 +449,9 @@ class NED():
 					# Synthesize EEG responses to images using a linear mapping
 					# of a pre-trained vision transformer (Dosovitskiy et al.,
 					# 2020) image features.
-					synthetic_neural_responses = eeg_things_eeg_2_vit_b_32(
-						self.ned_dir,
+					synthetic_neural_responses = encode_eeg_things_eeg_2_vit_b_32(
+						encoding_model,
 						images,
-						subject,
 						device
 						)
 
@@ -562,4 +683,3 @@ class NED():
 			return synthetic_neural_responses
 		else:
 			return synthetic_neural_responses, metadata
-
