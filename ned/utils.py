@@ -175,6 +175,7 @@ def get_model_fmri_nsd_fwrf(ned_dir, subject, roi, trained, device):
 		encoding_model['shared_model'] = shared_model
 		encoding_model['subject_fwrfs'] = subject_fwrfs
 		encoding_model['nnv'] = nnv
+	encoding_model['subject'] = subject
 	encoding_model['roi'] = roi
 	encoding_model['resize_px'] = resize_px
 
@@ -223,7 +224,6 @@ def encode_fmri_nsd_fwrf(encoding_model, images, device):
 	subject = encoding_model['subject']
 	roi = encoding_model['roi']
 	resize_px = encoding_model['resize_px']
-	_pred_fn = encoding_model['_pred_fn']
 
 	### Model functions ###
 	def _model_fn(_ext, _con, _x):
