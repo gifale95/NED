@@ -87,10 +87,6 @@ subject : int
 roi : str
 	Only required if modality=='fmri'. Name of the Region of Interest
 	(ROI) for which the fMRI encoding model was trained.
-trained : bool
-	If True, load a trained encoding model, that is, a model with a
-	trained backbone feature extractor. If False, the model's backbone
-	feature extractor is randomly initialized.
 device : str
 	Whether the encoding model is stored on the 'cpu' or 'cuda'. If
 	'auto', the code will use GPU if available, and otherwise CPU.
@@ -108,7 +104,6 @@ fmri_encoding_model = ned_object.get_encoding_model(
 	model='fwrf', # required
 	subject=1, # required
 	roi='V1', # default is None, only required if modality=='fmri'
-	trained=True, # default is True
 	device='auto' # default is 'auto'
 	)
 
@@ -119,7 +114,6 @@ eeg_encoding_model = ned_object.get_encoding_model(
 	model='vit_b_32', # required
 	subject=1, # required
 	roi=None, # default is None, only required if modality=='fmri'
-	trained=True, # default is True
 	device='auto' # default is 'auto'
 	)
 
