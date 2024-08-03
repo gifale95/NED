@@ -197,7 +197,7 @@ def encode_fmri_nsd_fwrf(encoding_model, images, device):
 	images : int
 		Images for which the neural responses are synthesized. Must be a 4-D
 		numpy array of shape (Batch size x 3 RGB Channels x Width x Height)
-		consisting of integer values in the range 0/255. Furthermore, the images
+		consisting of integer values in the range [0, 255]. Furthermore, the images
 		must be of square size (i.e., the width equals the height).
 	device : str
 		Whether to work on the 'cpu' or 'cuda'.
@@ -367,7 +367,7 @@ def encode_eeg_things_eeg_2_vit_b_32(encoding_model, images, device):
 	images : int
 		Images for which the neural responses are synthesized. Must be a 4-D
 		numpy array of shape (Batch size x 3 RGB Channels x Width x Height)
-		consisting of integer values in the range 0/255. Furthermore, the images
+		consisting of integer values in the range [0, 255]. Furthermore, the images
 		must be of square size (i.e., the width equals the height).
 	device : str
 		Whether to work on the 'cpu' or 'cuda'.

@@ -133,7 +133,7 @@ encoding_model : dict
 images : int
 	Images for which the neural responses are synthesized. Must be a 4-D
 	numpy array of shape (Batch size x 3 RGB Channels x Width x Height)
-	consisting of integer values in the range 0/255. Furthermore, the
+	consisting of integer values in the range [0, 255]. Furthermore, the
 	images must be of square size (i.e., equal width and height).
 return_metadata : bool
 	If True, return medatata along with the synthetic neural responses.
