@@ -6,7 +6,7 @@ space, and the ncsnr of the used voxels.
 Parameters
 ----------
 sub : int
-	Numbers of the used NSD subjects.
+	Numbers of the used NSD subject.
 roi : str
 	Used ROI.
 nsd_dir : str
