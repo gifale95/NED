@@ -269,7 +269,7 @@ If you come across problems with the toolbox, please submit an issue!
 
 If you use the Neural Encoding Dataset, please cite:
 
-> *Gifford AT, Cichy RM. 2024. In preparation. https://github.com/gifale95/NED*
+> *Gifford AT, Cichy RM. 2024. The Neural Encoding Dataset. In preparation. https://github.com/gifale95/NED*
 
 
 [ned_website]: https://www.alegifford.com/projects/ned/
