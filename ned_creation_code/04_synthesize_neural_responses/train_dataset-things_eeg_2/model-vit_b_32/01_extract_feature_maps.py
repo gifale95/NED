@@ -162,8 +162,8 @@ with torch.no_grad():
 		elif args.imageset == 'imagenet_val':
 			img, _ = img_dataset.__getitem__(i)
 		elif args.imageset == 'things':
-			img = Image.open(os.path.join(args.things_dir,
-				'image-database_things', img_dataset[i])).convert('RGB')
+			img = Image.open(os.path.join(args.things_dir, 'images',
+				img_dataset[i])).convert('RGB')
 		# Preprocess the image
 		img = transform(img).unsqueeze(0)
 		img = img.to(device)

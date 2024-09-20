@@ -180,7 +180,7 @@ for i in range(20):
 	elif args.imageset == 'imagenet_val':
 		img, _ = img_dataset.__getitem__(i)
 	elif args.imageset == 'things':
-		img = Image.open(os.path.join(args.things_dir, 'image-database_things',
+		img = Image.open(os.path.join(args.things_dir, 'images',
 			img_dataset[i])).convert('RGB')
 	min_size = min(img.size)
 	transform = trn.Compose([
@@ -277,8 +277,8 @@ if args.roi in ['lateral', 'ventral']:
 		elif args.imageset == 'imagenet_val':
 			img, _ = img_dataset.__getitem__(i)
 		elif args.imageset == 'things':
-			img = Image.open(os.path.join(args.things_dir,
-				'image-database_things', img_dataset[i])).convert('RGB')
+			img = Image.open(os.path.join(args.things_dir, 'images',
+				img_dataset[i])).convert('RGB')
 		min_size = min(img.size)
 		transform = trn.Compose([
 			trn.CenterCrop(min_size),
@@ -306,8 +306,8 @@ else:
 				elif args.imageset == 'imagenet_val':
 					img, _ = img_dataset.__getitem__(i)
 				elif args.imageset == 'things':
-					img = Image.open(os.path.join(args.things_dir,
-						'image-database_things', img_dataset[i])).convert('RGB')
+					img = Image.open(os.path.join(args.things_dir, 'images',
+						img_dataset[i])).convert('RGB')
 				min_size = min(img.size)
 				transform = trn.Compose([
 					trn.CenterCrop(min_size),
