@@ -188,15 +188,15 @@ if args.imageset == 'imagenet_val':
 # THINGS database metadata
 if args.imageset == 'things':
 	image_concept_index = np.squeeze(pd.read_csv(os.path.join(args.things_dir,
-		'THINGS', 'Metadata', 'Concept-specific', 'image_concept_index.csv'),
+		'02_object-level', 'image-concept-index_things.csv'),
 		header=None).values) - 1
-	image_paths_df = pd.read_csv(os.path.join(args.things_dir, 'THINGS',
-		'Metadata', 'Image-specific', 'image_paths.csv'), header=None)
-	unique_id_df = pd.read_csv(os.path.join(args.things_dir, 'THINGS',
-		'Metadata', 'Concept-specific', 'unique_id.csv'), header=None)
+	image_paths_df = pd.read_csv(os.path.join(args.things_dir, '01_image-level',
+		'image-paths_things.csv'), header=None)
+	unique_id_df = pd.read_csv(os.path.join(args.things_dir, '02_object-level',
+		'unique-id_things.csv'), header=None)
 	image_paths = {}
-	for i in range(len(image_concept_index)):
-		image_paths[i] = image_paths_df[0][i]
+	for i in range(len(image_paths_df)):
+		image_paths[i] = image_paths_df[0][i][7:]
 	unique_id = {}
 	for i in range(len(unique_id_df)):
 		unique_id[i] = unique_id_df[0][i]
