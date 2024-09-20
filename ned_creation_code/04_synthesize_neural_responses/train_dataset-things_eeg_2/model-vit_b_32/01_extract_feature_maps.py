@@ -75,15 +75,15 @@ elif args.imageset == 'imagenet_val':
 
 elif args.imageset == 'things':
 	image_concept_index = np.squeeze(pd.read_csv(os.path.join(args.things_dir,
-		'THINGS', 'Metadata', 'Concept-specific', 'image_concept_index.csv'),
+		'02_object-level', 'image-concept-index_things.csv'),
 		header=None).values) - 1
-	image_paths_df = pd.read_csv(os.path.join(args.things_dir, 'THINGS',
-		'Metadata', 'Image-specific', 'image_paths.csv'), header=None)
-	unique_id_df = pd.read_csv(os.path.join(args.things_dir, 'THINGS',
-		'Metadata', 'Concept-specific', 'unique_id.csv'), header=None)
+	image_paths_df = pd.read_csv(os.path.join(args.things_dir, '01_image-level',
+		'image-paths_things.csv'), header=None)
+	unique_id_df = pd.read_csv(os.path.join(args.things_dir, '02_object-level',
+		'unique-id_things.csv'), header=None)
 	image_paths = {}
-	for i in range(len(image_concept_index)):
-		image_paths[i] = image_paths_df[0][i]
+	for i in range(len(image_paths_df)):
+		image_paths[i] = image_paths_df[0][i][7:]
 	unique_id = {}
 	for i in range(len(unique_id_df)):
 		unique_id[i] = unique_id_df[0][i]
@@ -162,8 +162,8 @@ with torch.no_grad():
 		elif args.imageset == 'imagenet_val':
 			img, _ = img_dataset.__getitem__(i)
 		elif args.imageset == 'things':
-			img = Image.open(os.path.join(args.things_dir, 'THINGS',
-				img_dataset[i])).convert('RGB')
+			img = Image.open(os.path.join(args.things_dir,
+				'image-database_things', img_dataset[i])).convert('RGB')
 		# Preprocess the image
 		img = transform(img).unsqueeze(0)
 		img = img.to(device)

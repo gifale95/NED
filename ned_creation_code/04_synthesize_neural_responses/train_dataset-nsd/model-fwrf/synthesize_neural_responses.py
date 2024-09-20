@@ -123,8 +123,10 @@ elif args.imageset == 'things':
 # Subjects and ROI directory
 nsd_subjects = [args.sub]
 if args.roi in ['lateral', 'ventral']:
-	subj_roi_dir_1 = 'sub-' + format(args.sub, '02') + '_roi-' + args.roi + '_split-1'
-	subj_roi_dir_2 = 'sub-' + format(args.sub, '02') + '_roi-' + args.roi + '_split-2'
+	subj_roi_dir_1 = 'sub-' + format(args.sub, '02') + '_roi-' + args.roi + \
+		'_split-1'
+	subj_roi_dir_2 = 'sub-' + format(args.sub, '02') + '_roi-' + args.roi + \
+		'_split-2'
 else:
 	subj_roi_dir = 'sub-' + format(args.sub, '02') + '_roi-' + args.roi
 
@@ -178,7 +180,7 @@ for i in range(20):
 	elif args.imageset == 'imagenet_val':
 		img, _ = img_dataset.__getitem__(i)
 	elif args.imageset == 'things':
-		img = Image.open(os.path.join(args.things_dir, 'THINGS',
+		img = Image.open(os.path.join(args.things_dir, 'image-database_things',
 			img_dataset[i])).convert('RGB')
 	min_size = min(img.size)
 	transform = trn.Compose([
@@ -275,8 +277,8 @@ if args.roi in ['lateral', 'ventral']:
 		elif args.imageset == 'imagenet_val':
 			img, _ = img_dataset.__getitem__(i)
 		elif args.imageset == 'things':
-			img = Image.open(os.path.join(args.things_dir, 'THINGS',
-				img_dataset[i])).convert('RGB')
+			img = Image.open(os.path.join(args.things_dir,
+				'image-database_things', img_dataset[i])).convert('RGB')
 		min_size = min(img.size)
 		transform = trn.Compose([
 			trn.CenterCrop(min_size),
@@ -304,8 +306,8 @@ else:
 				elif args.imageset == 'imagenet_val':
 					img, _ = img_dataset.__getitem__(i)
 				elif args.imageset == 'things':
-					img = Image.open(os.path.join(args.things_dir, 'THINGS',
-						img_dataset[i])).convert('RGB')
+					img = Image.open(os.path.join(args.things_dir,
+						'image-database_things', img_dataset[i])).convert('RGB')
 				min_size = min(img.size)
 				transform = trn.Compose([
 					trn.CenterCrop(min_size),
