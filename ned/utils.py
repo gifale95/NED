@@ -336,7 +336,7 @@ def get_model_eeg_things_eeg_2_vit_b_32(ned_dir, subject, device):
 	weights_dir = os.path.join(ned_dir, 'encoding_models', 'modality-eeg',
 		'train_dataset-things_eeg_2', 'model-vit_b_32',
 		'encoding_models_weights', 'pca_param.npy')
-	pca_weights = np.load(weights_dir)
+	pca_weights = np.load(weights_dir, allow_pickle=True).item()
 	pca = PCA(n_components=1000, random_state=20200220)
 	pca.components_ = pca_weights['components_']
 	pca.explained_variance_ = pca_weights['explained_variance_']
