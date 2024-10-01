@@ -2,13 +2,14 @@ import os
 import numpy as np
 from tqdm import tqdm
 import torch
+from copy import deepcopy
 import torchvision
 from torchvision import transforms as trn
 from torchvision.models.feature_extraction import create_feature_extractor
 from torchvision.models.feature_extraction import get_graph_node_names
-from joblib import load
 from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
+from sklearn.linear_model import LinearRegression
 
 from ned.models.fwrf.load_nsd import image_feature_fn
 from ned.models.fwrf.torch_joint_training_unpacked_sequences import *
@@ -323,13 +324,29 @@ def get_model_eeg_things_eeg_2_vit_b_32(ned_dir, subject, device):
 	# Scaler
 	weights_dir = os.path.join(ned_dir, 'encoding_models', 'modality-eeg',
 		'train_dataset-things_eeg_2', 'model-vit_b_32',
-		'encoding_models_weights', 'StandardScaler_param.joblib')
-	scaler = load(weights_dir)
+		'encoding_models_weights', 'StandardScaler_param.npy')
+	scaler_weights = np.load(weights_dir, allow_pickle=True).item()
+	scaler = StandardScaler()
+	scaler.scale_ = scaler_weights['scale_']
+	scaler.mean_ = scaler_weights['mean_']
+	scaler.var_ = scaler_weights['var_']
+	scaler.n_features_in_ = scaler_weights['n_features_in_']
+	scaler.n_samples_seen_ = scaler_weights['n_samples_seen_']
 	# PCA
 	weights_dir = os.path.join(ned_dir, 'encoding_models', 'modality-eeg',
 		'train_dataset-things_eeg_2', 'model-vit_b_32',
-		'encoding_models_weights', 'pca_param.joblib')
-	pca = load(weights_dir)
+		'encoding_models_weights', 'pca_param.npy')
+	pca_weights = np.load(weights_dir)
+	pca = PCA(n_components=1000, random_state=20200220)
+	pca.components_ = pca_weights['components_']
+	pca.explained_variance_ = pca_weights['explained_variance_']
+	pca.explained_variance_ratio_ = pca_weights['explained_variance_ratio_']
+	pca.singular_values_ = pca_weights['singular_values_']
+	pca.mean_ = pca_weights['mean_']
+	pca.n_components_ = pca_weights['n_components_']
+	pca.n_samples_ = pca_weights['n_samples_']
+	pca.noise_variance_ = pca_weights['noise_variance_']
+	pca.n_features_in_ = pca_weights['n_features_in_']
 
 	### Define the image preprocessing ###
 	transform = torchvision.models.ViT_B_32_Weights.IMAGENET1K_V1.transforms()
@@ -338,8 +355,16 @@ def get_model_eeg_things_eeg_2_vit_b_32(ned_dir, subject, device):
 	weights_dir = os.path.join(ned_dir, 'encoding_models', 'modality-eeg',
 		'train_dataset-things_eeg_2', 'model-vit_b_32',
 		'encoding_models_weights', 'LinearRegression_param_sub-'+
-		format(subject, '02')+'.joblib')
-	regression_weights = load(weights_dir)
+		format(subject, '02')+'.npy')
+	reg_weights = np.load(weights_dir, allow_pickle=True).item()
+	regression_weights = []
+	for r in range(len(reg_weights)):
+		reg = LinearRegression()
+		reg.coef_ = reg_weights['rep-'+str(r+1)]['coef_']
+		reg.intercept_ = reg_weights['rep-'+str(r+1)]['intercept_']
+		reg.n_features_in_ = reg_weights['rep-'+str(r+1)]['n_features_in_']
+		regression_weights.append(deepcopy(reg))
+		del reg
 
 	### Store the encoding model into a dictionary ###
 	encoding_model = {}

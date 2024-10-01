@@ -8,6 +8,7 @@ all_rois : list of str
 	List with all modeled ROIs.
 ned_dir : str
 	Neural encoding dataset directory.
+	https://github.com/gifale95/NED
 
 """
 
@@ -113,4 +114,6 @@ for r, roi in enumerate(args.all_rois):
 # y-axis
 axs[23].set_xlabel('Subjects', fontsize=fontsize)
 
-#plt.savefig('encoding_models_prediction_accuracy_all_rois_bar', dpi=600)
+#fig.savefig('voxel_number.png', dpi=600, bbox_inches='tight')
+#fig.savefig('voxel_number.svg', bbox_inches='tight')
+

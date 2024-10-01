@@ -13,12 +13,16 @@ tot_img_partitions : int
 	Total amount of image partitions in which the feature maps were divided.
 ned_dir : str
 	Neural encoding dataset directory.
+	https://github.com/gifale95/NED
 nsd_dir : str
 	Directory of the NSD.
+	https://naturalscenesdataset.org/
 imagenet_dir : str
 	Directory of the ImageNet dataset.
+	https://www.image-net.org/challenges/LSVRC/2012/index.php
 things_dir : str
 	Directory of the THINGS database.
+	https://osf.io/jum2f/
 
 """
 
@@ -26,10 +30,10 @@ import argparse
 import os
 import numpy as np
 import pandas as pd
-from joblib import load
 from scipy.io import loadmat
 from sklearn.linear_model import LinearRegression
 import h5py
+from copy import deepcopy
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--sub', type=int, default=1) # [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
@@ -64,11 +68,19 @@ times = data['times']
 # =============================================================================
 # Load the trained regression weights
 # =============================================================================
-weights_dir = os.path.join(args.ned_dir, 'dataset', 'modality-eeg',
-	'train_dataset-things_eeg_2', 'model-vit_b_32', 'trained_models_weights',
-	'LinearRegression_param_sub-'+format(args.sub, '02')+'.joblib')
+weights_dir = os.path.join(args.ned_dir, 'encoding_models', 'modality-eeg',
+	'train_dataset-things_eeg_2', 'model-vit_b_32', 'encoding_models_weights',
+	'LinearRegression_param_sub-'+format(args.sub, '02')+'.npy')
+reg_weights = np.load(weights_dir, allow_pickle=True).item()
 
-regression_weights = load(weights_dir)
+regression_weights = []
+for r in range(len(reg_weights)):
+	reg = LinearRegression()
+	reg.coef_ = reg_weights['rep-'+str(r+1)]['coef_']
+	reg.intercept_ = reg_weights['rep-'+str(r+1)]['intercept_']
+	reg.n_features_in_ = reg_weights['rep-'+str(r+1)]['n_features_in_']
+	regression_weights.append(deepcopy(reg))
+	del reg
 
 
 # =============================================================================

@@ -7,8 +7,10 @@ Parameters
 ----------
 things_eeg_2_dir : str
 	Directory of the THINGS EEG2 dataset.
+	https://osf.io/3jk45/
 ned_dir : str
 	Neural encoding dataset directory.
+	https://github.com/gifale95/NED
 
 """
 
@@ -23,7 +25,6 @@ from torchvision.models.feature_extraction import create_feature_extractor
 from torchvision.models.feature_extraction import get_graph_node_names
 from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
-from joblib import dump
 
 
 # =============================================================================
@@ -114,8 +115,14 @@ save_dir = os.path.join(args.ned_dir, 'encoding_models', 'modality-eeg',
 	'encoding_models_weights')
 if os.path.isdir(save_dir) == False:
 	os.makedirs(save_dir)
-dump(scaler, os.path.join(save_dir, 'StandardScaler_param.joblib'),
-	compress=True)
+scaler_param = {
+	'scale_': scaler.scale_,
+	'mean_': scaler.mean_,
+	'var_': scaler.var_,
+	'n_features_in_': scaler.n_features_in_,
+	'n_samples_seen_': scaler.n_samples_seen_
+	}
+np.save(os.path.join(save_dir, 'StandardScaler_param.npy'), scaler_param)
 
 # Apply PCA
 pca = PCA(n_components=1000, random_state=seed)
@@ -123,7 +130,18 @@ pca.fit(fmaps_train)
 fmaps_train = pca.transform(fmaps_train)
 fmaps_train = fmaps_train.astype(np.float32)
 # Save the PCA parameters
-dump(pca, os.path.join(save_dir, 'pca_param.joblib'), compress=True)
+pca_param = {
+	'components_': pca.components_,
+	'explained_variance_': pca.explained_variance_,
+	'explained_variance_ratio_': pca.explained_variance_ratio_,
+	'singular_values_': pca.singular_values_,
+	'mean_': pca.mean_,
+	'n_components_': pca.n_components_,
+	'n_samples_': pca.n_samples_,
+	'noise_variance_': pca.noise_variance_,
+	'n_features_in_': pca.n_features_in_
+	}
+np.save(os.path.join(save_dir, 'pca_param.npy'), pca_param)
 
 # Save the downsampled feature maps
 np.save(os.path.join(save_dir, 'pca_feature_maps_train'), fmaps_train)

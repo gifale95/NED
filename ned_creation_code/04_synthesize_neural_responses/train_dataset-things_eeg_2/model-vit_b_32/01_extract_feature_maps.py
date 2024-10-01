@@ -13,12 +13,16 @@ img_partition : int
 	Image partition (from 1 to 20) for which the feature maps are created.
 ned_dir : str
 	Neural encoding dataset directory.
+	https://github.com/gifale95/NED
 nsd_dir : str
 	Directory of the NSD.
+	https://naturalscenesdataset.org/
 imagenet_dir : str
 	Directory of the ImageNet dataset.
+	https://www.image-net.org/challenges/LSVRC/2012/index.php
 things_dir : str
 	Directory of the THINGS database.
+	https://osf.io/jum2f/
 
 """
 
@@ -33,7 +37,6 @@ from tqdm import tqdm
 from PIL import Image
 import h5py
 import pandas as pd
-from joblib import load
 from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
 
@@ -53,11 +56,10 @@ print('\nInput parameters:')
 for key, val in vars(args).items():
 	print('{:16} {}'.format(key, val))
 
+# Set random seed for reproducible results
+seed = 20200220
 
-# =============================================================================
-# Computing resources
-# =============================================================================
-# Checking for GPU
+# Check for GPU
 device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
 
@@ -136,16 +138,32 @@ feature_extractor.eval()
 # Load the scaler and PCA weights
 # =============================================================================
 # Load the scaler weights
+scaler = StandardScaler()
 weights_dir = os.path.join(args.ned_dir, 'encoding_models', 'modality-eeg',
 	'train_dataset-things_eeg_2', 'model-vit_b_32',
-	'encoding_models_weights', 'StandardScaler_param.joblib')
-scaler = load(weights_dir)
+	'encoding_models_weights', 'StandardScaler_param.npy')
+scaler_weights = np.load(weights_dir, allow_pickle=True).item()
+scaler.scale_ = scaler_weights['scale_']
+scaler.mean_ = scaler_weights['mean_']
+scaler.var_ = scaler_weights['var_']
+scaler.n_features_in_ = scaler_weights['n_features_in_']
+scaler.n_samples_seen_ = scaler_weights['n_samples_seen_']
 
 # Load the PCA weights
+pca = PCA(n_components=1000, random_state=seed)
 weights_dir = os.path.join(args.ned_dir, 'encoding_models', 'modality-eeg',
 	'train_dataset-things_eeg_2', 'model-vit_b_32',
-	'encoding_models_weights', 'pca_param.joblib')
-pca = load(weights_dir)
+	'encoding_models_weights', 'pca_param.npy')
+pca_weights = np.load(weights_dir, allow_pickle=True).item()
+pca.components_ = pca_weights['components_']
+pca.explained_variance_ = pca_weights['explained_variance_']
+pca.explained_variance_ratio_ = pca_weights['explained_variance_ratio_']
+pca.singular_values_ = pca_weights['singular_values_']
+pca.mean_ = pca_weights['mean_']
+pca.n_components_ = pca_weights['n_components_']
+pca.n_samples_ = pca_weights['n_samples_']
+pca.noise_variance_ = pca_weights['noise_variance_']
+pca.n_features_in_ = pca_weights['n_features_in_']
 
 
 # =============================================================================
@@ -167,8 +185,8 @@ with torch.no_grad():
 		# Preprocess the image
 		img = transform(img).unsqueeze(0)
 		img = img.to(device)
-#		if device == 'cuda':
-#			img = img.cuda()
+		if device == 'cuda':
+			img = img.cuda()
 		# Extract the features
 		ft = feature_extractor(img)
 		# Flatten the features

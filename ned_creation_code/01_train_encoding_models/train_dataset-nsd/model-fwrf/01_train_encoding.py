@@ -56,6 +56,7 @@ batch_size : int
 	Batch size for weight update.
 ned_dir : str
 	Neural encoding dataset directory.
+	https://github.com/gifale95/NED
 
 """
 

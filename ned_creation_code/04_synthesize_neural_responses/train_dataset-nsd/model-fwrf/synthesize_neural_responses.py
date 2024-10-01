@@ -13,12 +13,16 @@ imageset : str
 	Name of imageset for which the neural responses are predicted.
 ned_dir : str
 	Neural encoding dataset directory.
+	https://github.com/gifale95/NED
 nsd_dir : str
 	Directory of the NSD.
+	https://naturalscenesdataset.org/
 imagenet_dir : str
 	Directory of the ImageNet dataset.
+	https://www.image-net.org/challenges/LSVRC/2012/index.php
 things_dir : str
 	Directory of the THINGS database.
+	https://osf.io/jum2f/
 
 """
 

@@ -11,6 +11,7 @@ channels : str
 	Used EEG channels.
 ned_dir : str
 	Neural encoding dataset directory.
+	https://github.com/gifale95/NED
 
 """
 
@@ -193,16 +194,17 @@ for s, sub in enumerate(args.all_subs):
 			'Single repeats encoding models']
 		axs[s].legend(labels, ncol=2, fontsize=fontsize, bbox_to_anchor=(1.33, -2.63))
 
-#plt.savefig('encoding_accuracy_train_dataset-things_eeg_2_channels-O', dpi=600)
-#plt.savefig('encoding_accuracy_train_dataset-things_eeg_2_channels-P', dpi=600)
-#plt.savefig('encoding_accuracy_train_dataset-things_eeg_2_channels-T', dpi=600)
-#plt.savefig('encoding_accuracy_train_dataset-things_eeg_2_channels-C', dpi=600)
-#plt.savefig('encoding_accuracy_train_dataset-things_eeg_2_channels-F', dpi=600)
-#plt.savefig('encoding_accuracy_train_dataset-things_eeg_2_channels-all', dpi=600)
+#fig.savefig('encoding_accuracy_channels-O.png', dpi=600, bbox_inches='tight')
+#fig.savefig('encoding_accuracy_channels-P.png', dpi=600, bbox_inches='tight')
+#fig.savefig('encoding_accuracy_channels-T.png', dpi=600, bbox_inches='tight')
+#fig.savefig('encoding_accuracy_channels-C.png', dpi=600, bbox_inches='tight')
+#fig.savefig('encoding_accuracy_channels-F.png', dpi=600, bbox_inches='tight')
+#fig.savefig('encoding_accuracy_channels-all.png', dpi=600, bbox_inches='tight')
 
-#plt.savefig('encoding_accuracy_train_dataset-things_eeg_2_channels-O.svg')
-#plt.savefig('encoding_accuracy_train_dataset-things_eeg_2_channels-P.svg')
-#plt.savefig('encoding_accuracy_train_dataset-things_eeg_2_channels-T.svg')
-#plt.savefig('encoding_accuracy_train_dataset-things_eeg_2_channels-C.svg')
-#plt.savefig('encoding_accuracy_train_dataset-things_eeg_2_channels-F.svg')
-#plt.savefig('encoding_accuracy_train_dataset-things_eeg_2_channels-all.svg')
+#fig.savefig('encoding_accuracy_channels-O.svg', bbox_inches='tight')
+#fig.savefig('encoding_accuracy_channels-P.svg', bbox_inches='tight')
+#fig.savefig('encoding_accuracy_channels-T.svg', bbox_inches='tight')
+#fig.savefig('encoding_accuracy_channels-C.svg', bbox_inches='tight')
+#fig.savefig('encoding_accuracy_channels-F.svg', bbox_inches='tight')
+#fig.savefig('encoding_accuracy_channels-all.svg', bbox_inches='tight')
+

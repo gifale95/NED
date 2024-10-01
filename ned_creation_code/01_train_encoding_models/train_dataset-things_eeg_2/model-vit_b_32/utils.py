@@ -20,7 +20,7 @@ def load_dnn_data(args, things_split):
 
 	### Load the DNN feature maps ###
 	data_dir = os.path.join(args.ned_dir, 'encoding_models', 'modality-eeg',
-		'training_dataset-things_eeg_2', 'model-vit_b_32',
+		'train_dataset-things_eeg_2', 'model-vit_b_32',
 		'encoding_models_weights', 'pca_feature_maps_'+things_split+'.npy')
 	# Load the feature maps
 	X = np.load(data_dir)
@@ -83,16 +83,22 @@ def train_regression(args, X_train, y_train):
 	"""
 
 	import os
-	from joblib import dump
+	import numpy as np
 	from sklearn.linear_model import LinearRegression
 	import copy
 
 	### Fit the regression at each EEG repeat, time-point and channel ###
-	regression_weights = []
+	regression_weights = {}
 	for i, y in enumerate(y_train):
 		reg = LinearRegression()
 		reg.fit(X_train, y)
-		regression_weights.append(copy.deepcopy(reg))
+		reg_dict = {
+			'coef_': reg.coef_,
+			'intercept_': reg.intercept_,
+			'n_features_in_': reg.n_features_in_
+			}
+		reg_param['rep-'+str(r+1)] = copy.deepcopy(reg_dict)
+		del reg_dict
 
 	### Save the trained regression weights ###
 	save_dir = os.path.join(args.ned_dir, 'encoding_models', 'modality-eeg',
@@ -100,6 +106,6 @@ def train_regression(args, X_train, y_train):
 		'encoding_models_weights')
 	if os.path.isdir(save_dir) == False:
 		os.makedirs(save_dir)
-	file_name = 'LinearRegression_param_sub-' + format(args.sub, '02') + \
-		'.joblib'
-	dump(regression_weights, os.path.join(save_dir, file_name), compress=True)
+	file_name = 'LinearRegression_param_sub-' + format(args.sub, '02') + '.npy'
+	np.save(os.path.join(save_dir, file_name), reg_param)
+

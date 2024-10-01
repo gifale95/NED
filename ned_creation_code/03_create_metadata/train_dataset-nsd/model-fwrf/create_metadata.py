@@ -8,6 +8,7 @@ roi : str
 	Used ROI.
 ned_dir : str
 	Neural encoding dataset directory.
+	https://github.com/gifale95/NED
 
 """
 

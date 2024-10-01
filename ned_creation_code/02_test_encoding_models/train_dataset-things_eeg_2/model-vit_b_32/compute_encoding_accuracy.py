@@ -12,10 +12,9 @@ n_iter : int
 	Number of analysis iterations.
 n_boot_iter : int
 	Number of bootstrap iterations for the confidence intervals.
-nsd_dir : str
-	Directory of the NSD.
 ned_dir : str
 	Neural encoding dataset directory.
+	https://github.com/gifale95/NED
 
 """
 
@@ -24,7 +23,6 @@ import os
 import random
 import numpy as np
 from tqdm import tqdm
-from joblib import load
 from sklearn.linear_model import LinearRegression
 from scipy.stats import pearsonr as corr
 from sklearn.utils import resample
@@ -92,7 +90,13 @@ for sub in tqdm(args.all_subs, leave=False):
 # Predict the responses for the test images
 # =============================================================================
 	for r in range(len(regression_weights)):
-		eeg_pred.append(regression_weights[r].predict(X_test))
+		reg = LinearRegression()
+		reg.coef_ = regression_weights['rep-'+str(r+1)]['coef_']
+		reg.intercept_ = regression_weights['rep-'+str(r+1)]['intercept_']
+		reg.n_features_in_ = \
+			regression_weights['rep-'+str(r+1)]['n_features_in_']
+		eeg_pred.append(reg.predict(X_test))
+		del reg
 	del regression_weights
 
 	# Rehape to: (Images x Repeats x Features)
@@ -251,3 +255,4 @@ if os.path.isdir(save_dir) == False:
 file_name = 'encoding_accuracy.npy'
 
 np.save(os.path.join(save_dir, file_name), correlation_results)
+

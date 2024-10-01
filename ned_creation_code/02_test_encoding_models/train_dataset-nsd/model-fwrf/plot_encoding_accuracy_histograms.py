@@ -8,6 +8,7 @@ all_rois : list of str
 	List with all modeled ROIs.
 ned_dir : str
 	Neural encoding dataset directory.
+	https://github.com/gifale95/NED
 
 """
 
@@ -97,20 +98,21 @@ for r, roi in enumerate(args.all_rois):
 # y-axis
 axs[23].set_xlabel('Explained variance (%)', fontsize=fontsize)
 
-#plt.savefig('encoding_accuracy_hist_train_dataset-nsd_sub-01', dpi=600)
-#plt.savefig('encoding_accuracy_hist_train_dataset-nsd_sub-02', dpi=600)
-#plt.savefig('encoding_accuracy_hist_train_dataset-nsd_sub-03', dpi=600)
-#plt.savefig('encoding_accuracy_hist_train_dataset-nsd_sub-04', dpi=600)
-#plt.savefig('encoding_accuracy_hist_train_dataset-nsd_sub-05', dpi=600)
-#plt.savefig('encoding_accuracy_hist_train_dataset-nsd_sub-06', dpi=600)
-#plt.savefig('encoding_accuracy_hist_train_dataset-nsd_sub-07', dpi=600)
-#plt.savefig('encoding_accuracy_hist_train_dataset-nsd_sub-08', dpi=600)
+#fig.savefig('encoding_accuracy_histogram_sub-01.png', dpi=600, bbox_inches='tight')
+#fig.savefig('encoding_accuracy_histogram_sub-02.png', dpi=600, bbox_inches='tight')
+#fig.savefig('encoding_accuracy_histogram_sub-03.png', dpi=600, bbox_inches='tight')
+#fig.savefig('encoding_accuracy_histogram_sub-04.png', dpi=600, bbox_inches='tight')
+#fig.savefig('encoding_accuracy_histogram_sub-05.png', dpi=600, bbox_inches='tight')
+#fig.savefig('encoding_accuracy_histogram_sub-06.png', dpi=600, bbox_inches='tight')
+#fig.savefig('encoding_accuracy_histogram_sub-07.png', dpi=600, bbox_inches='tight')
+#fig.savefig('encoding_accuracy_histogram_sub-08.png', dpi=600, bbox_inches='tight')
 
-#plt.savefig('encoding_accuracy_hist_train_dataset-nsd_sub-01.svg')
-#plt.savefig('encoding_accuracy_hist_train_dataset-nsd_sub-02.svg')
-#plt.savefig('encoding_accuracy_hist_train_dataset-nsd_sub-03.svg')
-#plt.savefig('encoding_accuracy_hist_train_dataset-nsd_sub-04.svg')
-#plt.savefig('encoding_accuracy_hist_train_dataset-nsd_sub-05.svg')
-#plt.savefig('encoding_accuracy_hist_train_dataset-nsd_sub-06.svg')
-#plt.savefig('encoding_accuracy_hist_train_dataset-nsd_sub-07.svg')
-#plt.savefig('encoding_accuracy_hist_train_dataset-nsd_sub-08.svg')
+#fig.savefig('encoding_accuracy_histogram_sub-01.svg', bbox_inches='tight')
+#fig.savefig('encoding_accuracy_histogram_sub-02.svg', bbox_inches='tight')
+#fig.savefig('encoding_accuracy_histogram_sub-03.svg', bbox_inches='tight')
+#fig.savefig('encoding_accuracy_histogram_sub-04.svg', bbox_inches='tight')
+#fig.savefig('encoding_accuracy_histogram_sub-05.svg', bbox_inches='tight')
+#fig.savefig('encoding_accuracy_histogram_sub-06.svg', bbox_inches='tight')
+#fig.savefig('encoding_accuracy_histogram_sub-07.svg', bbox_inches='tight')
+#fig.savefig('encoding_accuracy_histogram_sub-08.svg', bbox_inches='tight')
+

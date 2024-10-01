@@ -11,8 +11,10 @@ roi : str
 	Used ROI.
 nsd_dir : str
 	Directory of the NSD.
+	https://naturalscenesdataset.org/
 ned_dir : str
 	Neural encoding dataset directory.
+	https://github.com/gifale95/NED
 
 """
 

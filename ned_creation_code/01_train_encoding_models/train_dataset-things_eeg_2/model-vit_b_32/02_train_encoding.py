@@ -11,6 +11,7 @@ sub : int
 	Used subject.
 ned_dir : str
 	Neural encoding dataset directory.
+	https://github.com/gifale95/NED
 
 """
 

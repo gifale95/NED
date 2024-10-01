@@ -37,8 +37,10 @@ sfreq : int
 	Downsampling frequency.
 things_eeg_2_dir : str
 	Directory of the THINGS EEG2 dataset.
+	https://osf.io/3jk45/
 ned_dir : str
 	Neural encoding dataset directory.
+	https://github.com/gifale95/NED
 
 """
 

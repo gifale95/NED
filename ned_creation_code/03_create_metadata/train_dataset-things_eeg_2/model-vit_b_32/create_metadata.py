@@ -8,6 +8,7 @@ n_synthetic_repeats : int
 	Number synthetic data trials.
 ned_dir : str
 	Neural encoding dataset directory.
+	https://github.com/gifale95/NED
 
 """
 
