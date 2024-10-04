@@ -343,8 +343,7 @@ for sub in tqdm(args.all_subs, leave=False):
 				betas_pred[:,v])[0]
 		del betas_bio
 
-		# Set negative correlation values to 0, so to keep the
-		# noise-ceiling-normalized encoding accuracy positive
+		# Set negative correlation values to 0
 		correlation[correlation<0] = 0
 
 		# Square the correlation values
