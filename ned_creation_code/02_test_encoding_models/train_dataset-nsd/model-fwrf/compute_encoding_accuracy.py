@@ -344,7 +344,7 @@ for sub in tqdm(args.all_subs, leave=False):
 		del betas_bio
 
 		# Set negative correlation values to 0, so to keep the
-		# noise-normalized encoding accuracy positive
+		# noise-ceiling-normalized encoding accuracy positive
 		correlation[correlation<0] = 0
 
 		# Square the correlation values
@@ -352,7 +352,7 @@ for sub in tqdm(args.all_subs, leave=False):
 		r2['s'+str(sub)+'_'+r] = r2_corr
 
 		# Add a very small number to noise ceiling values of 0, otherwise
-		# the noise-normalized encoding accuracy cannot be calculated
+		# the noise-ceiling-normalized encoding accuracy cannot be calculated
 		# (division by 0 is not possible)
 		noise_ceil[noise_ceil==0] = 1e-14
 		noise_ceiling['s'+str(sub)+'_'+r] = noise_ceil
@@ -360,7 +360,7 @@ for sub in tqdm(args.all_subs, leave=False):
 		# Compute the noise-normalized encoding accuracy
 		prediction_accuracy = np.divide(r2_corr, noise_ceil)
 
-		# Set the noise-normalized encoding accuracy to 1 for those
+		# Set the noise-ceiling-normalized encoding accuracy to 1 for those
 		# vertices in which the correlation is higher than the noise
 		# ceiling, to prevent encoding accuracy values higher than 100%
 		prediction_accuracy[prediction_accuracy>1] = 1
