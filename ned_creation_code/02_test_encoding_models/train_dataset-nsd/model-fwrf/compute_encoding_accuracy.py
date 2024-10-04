@@ -317,7 +317,7 @@ for sub in tqdm(args.all_subs, leave=False):
 
 
 # =============================================================================
-# Compute the noise normalized encoding accuracy
+# Compute the noise-ceiling-normalized encoding accuracy
 # =============================================================================
 		# Load the biological test data, and average it across repeats
 		data_dir = os.path.join(args.ned_dir, 'model_training_datasets',
