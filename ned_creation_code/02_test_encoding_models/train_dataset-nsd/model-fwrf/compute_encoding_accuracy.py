@@ -360,8 +360,8 @@ for sub in tqdm(args.all_subs, leave=False):
 		prediction_accuracy = np.divide(r2_corr, noise_ceil)
 
 		# Set the noise-ceiling-normalized encoding accuracy to 1 for those
-		# vertices in which the correlation is higher than the noise
-		# ceiling, to prevent encoding accuracy values higher than 100%
+		# voxels in which the correlation is higher than the noise ceiling, to
+		# prevent encoding accuracy values higher than 100%
 		prediction_accuracy[prediction_accuracy>1] = 1
 		noise_normalized_encoding['s'+str(sub)+'_'+r] = prediction_accuracy
 		del betas_pred
