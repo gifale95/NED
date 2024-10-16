@@ -175,8 +175,9 @@ def get_model_fmri_nsd_fwrf(ned_dir, subject, roi, device):
 
 def encode_fmri_nsd_fwrf(encoding_model, images, device):
 	"""
-	Synthesize fMRI responses for the input images using the feature-weighted
-	receptive field (fwrf) encoding model (St-Yves & Naselaris, 2018).
+	Generate in silico fMRI responses for the input images using the
+	feature-weighted receptive field (fwrf) encoding model (St-Yves &
+	Naselaris, 2018).
 
 	This code is an adapted version of the code from the paper:
 	Allen, E.J., St-Yves, G., Wu, Y., Breedlove, J.L., Prince, J.S., Dowdle,
@@ -196,17 +197,18 @@ def encode_fmri_nsd_fwrf(encoding_model, images, device):
 	encoding_model : dict
 		Neural encoding model.
 	images : int
-		Images for which the neural responses are synthesized. Must be a 4-D
-		numpy array of shape (Batch size x 3 RGB Channels x Width x Height)
-		consisting of integer values in the range [0, 255]. Furthermore, the
-		images must be of square size (i.e., equal width and height).
+		Images for which the in silico neural responses are generated. Must be
+		a 4-D numpy array of shape (Batch size x 3 RGB Channels x Width x
+		Height) consisting of integer values in the range [0, 255].
+		Furthermore, the images must be of square size (i.e., equal width and
+		height).
 	device : str
 		Whether to work on the 'cpu' or 'cuda'.
 
 	Returns
 	-------
-	synthetic_fmri_responses : float
-		Synthetic fMRI responses for the input stimulus images, of shape:
+	insilico_fmri_responses : float
+		In silico fMRI responses for the input stimulus images, of shape:
 		(Images x N ROI Voxels).
 	"""
 
@@ -223,15 +225,15 @@ def encode_fmri_nsd_fwrf(encoding_model, images, device):
 	def _pred_fn(_ext, _con, xb):
 		return _model_fn(_ext, _con, torch.from_numpy(xb).to(device))
 
-	### Synthesize the fMRI responses to images ###
-	# Empty synthetic fMRI responses variables of shape: (Images x Voxels)
+	### Generate the in silico fMRI responses to images ###
+	# Empty in silico fMRI responses variables of shape: (Images x Voxels)
 	if roi in ['lateral', 'ventral']:
-		synthetic_fmri_responses_1 = np.zeros((len(images),
+		insilico_fmri_responses = np.zeros((len(images),
 			encoding_model['nnv_1'][subject]), dtype=np.float32)
-		synthetic_fmri_responses_2 = np.zeros((len(images),
+		insilico_fmri_responses = np.zeros((len(images),
 			encoding_model['nnv_2'][subject]), dtype=np.float32)
 	else:
-		synthetic_fmri_responses = np.zeros((len(images),
+		insilico_fmri_responses = np.zeros((len(images),
 			encoding_model['nnv'][subject]), dtype=np.float32)
 
 	# Preprocess the images
@@ -243,30 +245,30 @@ def encode_fmri_nsd_fwrf(encoding_model, images, device):
 	images = np.asarray(images)
 	images = image_feature_fn(images)
 
-	# Synthesize the fMRI responses
+	# Generate the in silico fMRI responses
 	with torch.no_grad():
 		if roi in ['lateral', 'ventral']:
-			synthetic_fmri_responses_1 = subject_pred_pass(
+			insilico_fmri_responses_1 = subject_pred_pass(
 				_pred_fn, encoding_model['shared_model_1'],
 				encoding_model['subject_fwrfs_1'][subject], images,
 				batch_size=100)
-			synthetic_fmri_responses_2 = subject_pred_pass(
+			insilico_fmri_responses_2 = subject_pred_pass(
 				_pred_fn, encoding_model['shared_model_2'],
 				encoding_model['subject_fwrfs_2'][subject], images,
 				batch_size=100)
-			synthetic_fmri_responses = np.append(synthetic_fmri_responses_1,
-				synthetic_fmri_responses_2, 1)
+			insilico_fmri_responses = np.append(insilico_fmri_responses_1,
+				insilico_fmri_responses_2, 1)
 		else:
-			synthetic_fmri_responses = subject_pred_pass(_pred_fn,
+			insilico_fmri_responses = subject_pred_pass(_pred_fn,
 				encoding_model['shared_model'],
 				encoding_model['subject_fwrfs'][subject], images,
 				batch_size=100)
 
-	# Convert synthetic fMRI responses to float 32
-	synthetic_fmri_responses = synthetic_fmri_responses.astype(np.float32)
+	# Convert the in silico fMRI responses to float 32
+	insilico_fmri_responses = insilico_fmri_responses.astype(np.float32)
 
 	### Output ###
-	return synthetic_fmri_responses
+	return insilico_fmri_responses
 
 
 def get_model_eeg_things_eeg_2_vit_b_32(ned_dir, subject, device):
@@ -382,7 +384,7 @@ def get_model_eeg_things_eeg_2_vit_b_32(ned_dir, subject, device):
 
 def encode_eeg_things_eeg_2_vit_b_32(encoding_model, images, device):
 	"""
-	Synthesize EEG responses to images using a linear mapping of a
+	Generate in silico EEG responses to images using a linear mapping of a
 	pre-trained vision transformer (Dosovitskiy et al., 2020) image features.
 
 	Parameters
@@ -390,18 +392,19 @@ def encode_eeg_things_eeg_2_vit_b_32(encoding_model, images, device):
 	encoding_model : dict
 		Neural encoding model.
 	images : int
-		Images for which the neural responses are synthesized. Must be a 4-D
-		numpy array of shape (Batch size x 3 RGB Channels x Width x Height)
-		consisting of integer values in the range [0, 255]. Furthermore, the images
-		must be of square size (i.e., the width equals the height).
+		Images for which the in silico neural responses are generated. Must be
+		a 4-D numpy array of shape (Batch size x 3 RGB Channels x Width x
+		Height) consisting of integer values in the range [0, 255].
+		Furthermore, the images must be of square size (i.e., the width equals
+		the height).
 	device : str
 		Whether to work on the 'cpu' or 'cuda'.
 
 	Returns
 	-------
-	synthetic_eeg_responses : float
-		Synthetic EEG responses for the input stimulus images, of shape:
-		(Images x Repetitions x EEG Channels x EEG time points).
+	insilico_eeg_responses : float
+		In silico EEG responses for the input stimulus images, of shape:
+		(Images x Repetitions x Channels x Time points).
 	"""
 
 	### Extract model parameters ###
@@ -452,25 +455,25 @@ def encode_eeg_things_eeg_2_vit_b_32(encoding_model, images, device):
 	# components
 	features = features[:,:250]
 
-	### Synthesize the EEG responses ###
-	synthetic_eeg_responses = []
+	### Generate the in silico EEG responses ###
+	insilico_eeg_responses = []
 
 	for reg in encoding_model['regression_weights']:
 
-		# Synthesize the EEG responses
-		synt_eeg = reg.predict(features)
-		synt_eeg = synt_eeg.astype(np.float32)
+		# Generate the in silico EEG responses
+		insilico_eeg = reg.predict(features)
+		insilico_eeg = insilico_eeg.astype(np.float32)
 
-		# Reshape the synthetic EEG data to (Images x Channels x Time)
-		synt_eeg = np.reshape(synt_eeg, (len(synt_eeg), len(ch_names),
-		len(times)))
-		synthetic_eeg_responses.append(synt_eeg)
-		del synt_eeg
+		# Reshape the in silico EEG responses to (Images x Channels x Time)
+		insilico_eeg = np.reshape(insilico_eeg, (len(insilico_eeg),
+			len(ch_names), len(times)))
+		insilico_eeg_responses.append(insilico_eeg)
+		del insilico_eeg
 
 	# Reshape to: (Images x Repeats x Channels x Time)
-	synthetic_eeg_responses = np.swapaxes(np.asarray(synthetic_eeg_responses),
+	insilico_eeg_responses = np.swapaxes(np.asarray(insilico_eeg_responses),
 		0, 1)
-	synthetic_eeg_responses = synthetic_eeg_responses.astype(np.float32)
+	insilico_eeg_responses = insilico_eeg_responses.astype(np.float32)
 
 	### Output ###
-	return synthetic_eeg_responses
+	return insilico_eeg_responses

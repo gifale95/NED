@@ -216,7 +216,8 @@ class NED():
 		train_dataset : str
 			Name of the neural dataset used to train the encoding models.
 		model : str
-			Encoding model type used to synthesize the neural responses.
+			Encoding model type used to generate the in silico neural
+			responses.
 		subject : int
 			Subject number for which the encoding model was trained.
 		roi : str
@@ -320,34 +321,35 @@ class NED():
 	def encode(self, encoding_model, images, return_metadata=True,
 			device='auto'):
 		"""
-		Synthesize neural responses for arbitrary stimulus images, and
-		optionally return the synthetic fMRI metadata.
+		Generate in silico neural responses for arbitrary stimulus images, and
+		optionally return the in silico neural responses metadata.
 
 		Parameters
 		----------
 		encoding_model : list
 			Neural encoding model.
 		images : int
-			Images for which the neural responses are synthesized. Must be a 4-D
-			numpy array of shape (Batch size x 3 RGB Channels x Width x Height)
-			consisting of integer values in the range [0, 255]. Furthermore, the
-			images must be of square size (i.e., equal width and height).
+			Images for which the in silico neural responses are generated. Must
+			be a 4-D numpy array of shape (Batch size x 3 RGB Channels x Width
+			x Height) consisting of integer values in the range [0, 255].
+			Furthermore, the images must be of square size (i.e., equal width
+			and height).
 		return_metadata : bool
-			If True, return medatata along with the synthetic neural responses.
+			If True, return medatata along with the in silico neural responses.
 		device : str
 			Whether to work on the 'cpu' or 'cuda'. If 'auto', the code will
 			use GPU if available, and otherwise CPU.
 
 		Returns
 		-------
-		synthetic_neural_responses : float
-			Synthetic neural responses for the input stimulus images.
+		insilico_neural_responses : float
+			In silico neural responses for the input stimulus images.
 			If modality=='fmri', the neural response will be of shape:
-			(Images x N ROI Voxels).
+			(Images x Voxels).
 			If modality=='eeg', the neural response will be of shape:
-			(Images x Repetitions x EEG Channels x EEG time points) if
+			(Images x Repetitions x Channels x Time points) if
 		metadata : dict
-			Synthetic neural responses metadata.
+			In silico neural responses metadata.
 		"""
 
 		### Extract model parameters ###
@@ -419,14 +421,14 @@ class NED():
 		if device == 'auto':
 			device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
-		### Synthesize neural responses to the input images ###
+		### Generate the in silico neural responses for the input images ###
 		if modality == 'fmri':
 			if train_dataset == 'nsd':
 				if model == 'fwrf':
-					# Synthesize fMRI responses to images using the
+					# General in silico fMRI responses to images using the
 					# feature-weighted receptive field (fwrf) encoding model
 					# (St-Yves & Naselaris, 2018).
-					synthetic_neural_responses = encode_fmri_nsd_fwrf(
+					insilico_neural_responses = encode_fmri_nsd_fwrf(
 						encoding_model,
 						images,
 						device
@@ -435,16 +437,16 @@ class NED():
 		elif modality == 'eeg':
 			if train_dataset == 'things_eeg_2':
 				if model == 'vit_b_32':
-					# Synthesize EEG responses to images using a linear mapping
-					# of a pre-trained vision transformer (Dosovitskiy et al.,
-					# 2020) image features.
-					synthetic_neural_responses = encode_eeg_things_eeg_2_vit_b_32(
+					# Generate in silico EEG responses to images using a linear
+					# mapping of a pre-trained vision transformer (Dosovitskiy
+					# et al., 2020) image features.
+					insilico_neural_responses = encode_eeg_things_eeg_2_vit_b_32(
 						encoding_model,
 						images,
 						device
 						)
 
-		### Get the synthetic neural responses metadata ###
+		### Get the in silico neural responses metadata ###
 		if return_metadata == True:
 			metadata = self.get_metadata(
 				modality,
@@ -456,9 +458,9 @@ class NED():
 
 		### Output ###
 		if return_metadata == False:
-			return synthetic_neural_responses
+			return insilico_neural_responses
 		else:
-			return synthetic_neural_responses, metadata
+			return insilico_neural_responses, metadata
 
 
 	def get_metadata(self, modality, train_dataset, model, subject, roi=None):
@@ -475,7 +477,8 @@ class NED():
 		train_dataset : str
 			Name of the neural dataset used to train the encoding models.
 		model : str
-			Encoding model type used to synthesize the neural responses.
+			Encoding model type used to generate the in silico neural
+			responses.
 		subject : int
 			Subject number for which the metadata is loaded.
 		roi : str
@@ -485,7 +488,7 @@ class NED():
 		Returns
 		-------
 		metadata : dict
-			Synthetic neural responses metadata.
+			In silico neural responses metadata.
 		"""
 
 		### Check input ###
@@ -545,10 +548,11 @@ class NED():
 		return metadata
 
 
-	def load_synthetic_neural_responses(self, modality, train_dataset, model,
+	def load_insilico_neural_responses(self, modality, train_dataset, model,
 		imageset, subject, roi=None, return_metadata=True):
 		"""
-		Load NED's synthetic neural responses, and optionally their metadata.
+		Load NED's pre-generated in silico neural responses, and optionally
+		their metadata.
 
 		Parameters
 		----------
@@ -557,35 +561,36 @@ class NED():
 		train_dataset : str
 			Name of the neural dataset used to train the encoding models.
 		model : str
-			Encoding model type used to synthesize the fMRI responses.
+			Encoding model type used to generate the in silico fMRI responses.
 		imageset : str
-			Imageset for which the fMRI responses are synthesized. Available
-			options are 'nsd', 'imagenet_val' and 'things'.
-			If 'nsd', load synthetic neural responses for the 73,000 NSD images
+			Imageset for which the in silico fMRI responses are generated.
+			Available options are 'nsd', 'imagenet_val' and 'things'.
+			If 'nsd', load in silico neural responses for the 73,000 NSD images
 			(Allen et al., 2023).
-			If 'imagenet_val', load synthetic neural responses for the 50,000
+			If 'imagenet_val', load in silico neural responses for the 50,000
 			ILSVRC-2012 validation images (Russakovsky et al., 2015).
-			If 'things', load synthetic neural responses for the 26,107 images
+			If 'things', load in silico neural responses for the 26,107 images
 			from the THINGS database (Hebart et al., 2019).
 		subject : int
-			Subject number for which the fMRI image responses are synthesized.
+			Subject number for which the in silico fMRI image responses are
+			generated.
 		roi : str
 			Only required if modality=='fmri'. Name of the Region of Interest
-			(ROI) for which the fMRI image responses are synthesized.
+			(ROI) for which the in silico fMRI image responses are generated.
 		return_metadata : bool
-			If True, return fMRI medatata along with the synthetic fMRI
+			If True, return fMRI medatata along with the in silico fMRI
 			responses.
 
 		Returns
 		-------
-		synthetic_neural_responses : h5py
-			Synthetic neural responses for the input stimulus images.
+		insilico_neural_responses : h5py
+			In silico neural responses for the input stimulus images.
 			If modality=='fmri', the neural response will be of shape:
-			(Images x N ROI Voxels).
+			(Images x Voxels).
 			If modality=='eeg', the neural response will be of shape:
-			(Images x Repetitions x EEG Channels x EEG time points) if
+			(Images x Repetitions x Channels x Time points) if
 		metadata : dict
-			Synthetic neural responses metadata.
+			In silico neural responses metadata.
 		"""
 
 		### Check input ###
@@ -636,10 +641,11 @@ class NED():
 		if type(return_metadata) != bool:
 			raise TypeError("'return_metadata' must be of type bool!")
 
-		### Synthetic neural responses directories ###
-		parent_dir = os.path.join(self.ned_dir, 'synthetic_neural_responses',
-			'modality-'+modality, 'train_dataset-'+train_dataset, 'model-'+
-			model, 'imageset-'+imageset)
+		### In silico neural responses directories ###
+		parent_dir = os.path.join(self.ned_dir,
+			'pregenerated_insilico_neural_responses', 'modality-'+modality,
+			'train_dataset-'+train_dataset, 'model-'+ model, 'imageset-'+
+			imageset)
 			
 		if modality == 'fmri':
 			file_name = 'synthetic_neural_responses_sub-' + \
@@ -649,8 +655,8 @@ class NED():
 			file_name = 'synthetic_neural_responses_sub-' + \
 				format(subject, '02') +'.h5'
 
-		### Load NED's synthetic neural responses ###
-		synthetic_neural_responses = h5py.File(os.path.join(parent_dir,
+		### Load NED's pre-generated in silico neural responses ###
+		insilico_neural_responses = h5py.File(os.path.join(parent_dir,
 			file_name), 'r').get('synthetic_neural_responses')
 
 		### Metadata directories ###
@@ -669,6 +675,6 @@ class NED():
 
 		### Output ###
 		if return_metadata == False:
-			return synthetic_neural_responses
+			return insilico_neural_responses
 		else:
-			return synthetic_neural_responses, metadata
+			return insilico_neural_responses, metadata
