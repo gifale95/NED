@@ -116,12 +116,39 @@ def subject_holdout_pass(_hld_fn, _ext, _cons, x, v, ordering, batch_size):
     return val_err / sum(len(vv) for s,vv in v.items())
 
 #################################################
+#def subject_pred_pass(_pred_fn, _ext, _con, x, batch_size): # Backup of original!
+#    pred = _pred_fn(_ext, _con, x[:batch_size]) # this is just to get the shape
+#    pred = np.zeros(shape=(len(x), pred.shape[1]), dtype=np.float32) # allocate
+#    for rb,_ in iterate_range(0, len(x), batch_size):
+#        pred[rb] = get_value(_pred_fn(_ext, _con, x[rb]))
+#    return pred
 def subject_pred_pass(_pred_fn, _ext, _con, x, batch_size):
-    pred = _pred_fn(_ext, _con, x[:batch_size]) # this is just to get the shape
-    pred = np.zeros(shape=(len(x), pred.shape[1]), dtype=np.float32) # allocate
-    for rb,_ in iterate_range(0, len(x), batch_size):
-        pred[rb] = get_value(_pred_fn(_ext, _con, x[rb]))
-    return pred
+    n_batches = int(np.ceil(len(x) / batch_size))
+    progress_bar = tqdm(range(n_batches), desc='Encoding fMRI responses')
+    idx = 0
+    for b in progress_bar:
+        # Update the progress bar
+        encoded_images = batch_size * idx
+        progress_bar.set_postfix(
+            {'Encoded images': encoded_images, 'Total images': len(x)})
+        # Image batch indices
+        idx_start = b * batch_size
+        idx_end = idx_start + batch_size
+        # Generate the in silico fMRI responses
+        pred = get_value(_pred_fn(_ext, _con, x[idx_start:idx_end]))
+        # Store the in silico fMRI responses
+        if b == 0:
+            pred_fmri = pred
+        else:
+            pred_fmri = np.append(pred_fmri, pred, 0)
+        del pred
+        # Update the progress bar
+        idx += 1
+        encoded_images = batch_size * idx
+        progress_bar.set_postfix(
+            {'Encoded images': encoded_images, 'Total images': len(x)})
+    pred_fmri = pred_fmri.astype(np.float32)
+    return pred_fmri
 
 def subject_validation_pass(_pred_fn, _ext, _con, x, v, ordering, batch_size):
     val_cc  = np.zeros(shape=(v.shape[1]), dtype=v.dtype)

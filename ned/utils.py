@@ -430,50 +430,49 @@ def encode_eeg_things_eeg_2_vit_b_32(encoding_model, images, device):
 			idx_start = b * batch_size
 			idx_end = idx_start + batch_size
 			# Extract the features
-			ft = encoding_model['feature_extractor'](
+			features = encoding_model['feature_extractor'](
 				images[idx_start:idx_end].to(device))
 			# Flatten the features
-			ft = torch.hstack([torch.flatten(l, start_dim=1) for l in ft.values()])
-			ft = ft.detach().cpu().numpy()
+			features = torch.hstack([torch.flatten(l, start_dim=1) for l in features.values()])
+			features = features.detach().cpu().numpy()
 			# Standardize the features
-			ft = encoding_model['scaler'].transform(ft)
+			features = encoding_model['scaler'].transform(features)
 			# Apply PCA
-			ft = encoding_model['pca'].transform(ft)
-			# Store the features
+			features = encoding_model['pca'].transform(features)
+			# The encoding models are trained using only the first 250 principal
+			# components
+			features = features[:,:250]
+			features = features.astype(np.float32)
+
+			### Generate the in silico EEG responses ###
+			insilico_eeg_part = []
+			for reg in encoding_model['regression_weights']:
+				# Generate the in silico EEG responses
+				insilico_eeg = reg.predict(features)
+				insilico_eeg = insilico_eeg.astype(np.float32)
+				# Reshape the in silico EEG responses to:
+				# (Images x Channels x Time)
+				insilico_eeg = np.reshape(insilico_eeg, (len(insilico_eeg),
+					len(ch_names), len(times)))
+				insilico_eeg_part.append(insilico_eeg)
+				del insilico_eeg
+			# Reshape to: (Images x Repeats x Channels x Time)
+			insilico_eeg_part = np.swapaxes(np.asarray(insilico_eeg_part),
+				0, 1)
+			insilico_eeg_part = insilico_eeg_part.astype(np.float32)
+
+			### Store the features ###
 			if b == 0:
-				features = ft
+				insilico_eeg_responses = insilico_eeg_part
 			else:
-				features = np.append(features, ft, 0)
-			del ft
+				insilico_eeg_responses = np.append(insilico_eeg_responses,
+					insilico_eeg_part, 0)
+			del insilico_eeg_part
 			# Update the progress bar
 			idx += 1
 			encoded_images = batch_size * idx
 			progress_bar.set_postfix(
 				{'Encoded images': encoded_images, 'Total images': len(images)})
-	features = features.astype(np.float32)
-	# The encoding models are trained using only the first 250 principal
-	# components
-	features = features[:,:250]
-
-	### Generate the in silico EEG responses ###
-	insilico_eeg_responses = []
-
-	for reg in encoding_model['regression_weights']:
-
-		# Generate the in silico EEG responses
-		insilico_eeg = reg.predict(features)
-		insilico_eeg = insilico_eeg.astype(np.float32)
-
-		# Reshape the in silico EEG responses to (Images x Channels x Time)
-		insilico_eeg = np.reshape(insilico_eeg, (len(insilico_eeg),
-			len(ch_names), len(times)))
-		insilico_eeg_responses.append(insilico_eeg)
-		del insilico_eeg
-
-	# Reshape to: (Images x Repeats x Channels x Time)
-	insilico_eeg_responses = np.swapaxes(np.asarray(insilico_eeg_responses),
-		0, 1)
-	insilico_eeg_responses = insilico_eeg_responses.astype(np.float32)
 
 	### Output ###
 	return insilico_eeg_responses
