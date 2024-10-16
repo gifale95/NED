@@ -159,7 +159,7 @@ def zscore(args, epoched_test, epoched_train):
 	import numpy as np
 	from sklearn.preprocessing import StandardScaler
 
-	### z-scpre the data of each session ###
+	### z-score the data of each session ###
 	zscored_test = []
 	zscored_train = []
 	for s in range(args.n_ses):
