@@ -190,9 +190,8 @@ for s, sub in enumerate(args.all_subs):
 
 	# Legend
 	if s in [0]:
-		labels = ['All repeats encoding models',
-			'Single repeats encoding models']
-		axs[s].legend(labels, ncol=2, fontsize=fontsize, bbox_to_anchor=(1.33, -2.63))
+		labels = ['Average repetitions', 'Single repetitions']
+		axs[s].legend(labels, ncol=2, fontsize=fontsize, bbox_to_anchor=(3, -2.63))
 
 #fig.savefig('encoding_accuracy_channels-O.png', dpi=600, bbox_inches='tight')
 #fig.savefig('encoding_accuracy_channels-P.png', dpi=600, bbox_inches='tight')
