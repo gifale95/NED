@@ -561,9 +561,10 @@ class NED():
 		train_dataset : str
 			Name of the neural dataset used to train the encoding models.
 		model : str
-			Encoding model type used to generate the in silico fMRI responses.
+			Encoding model type used to generate the in silico neural
+			responses.
 		imageset : str
-			Imageset for which the in silico fMRI responses are generated.
+			Imageset for which the in silico neural responses are generated.
 			Available options are 'nsd', 'imagenet_val' and 'things'.
 			If 'nsd', load in silico neural responses for the 73,000 NSD images
 			(Allen et al., 2023).
@@ -572,14 +573,13 @@ class NED():
 			If 'things', load in silico neural responses for the 26,107 images
 			from the THINGS database (Hebart et al., 2019).
 		subject : int
-			Subject number for which the in silico fMRI image responses are
+			Subject number for which the in silico neural image responses are
 			generated.
 		roi : str
 			Only required if modality=='fmri'. Name of the Region of Interest
-			(ROI) for which the in silico fMRI image responses are generated.
+			(ROI) for which the in silico fMRI responses are generated.
 		return_metadata : bool
-			If True, return fMRI medatata along with the in silico fMRI
-			responses.
+			If True, additionally return in silico neural responses metadata.
 
 		Returns
 		-------
