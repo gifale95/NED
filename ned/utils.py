@@ -223,7 +223,7 @@ def encode_fmri_nsd_fwrf(encoding_model, images, device):
 		_y, _fm, _h = _ext(_x)
 		return _con(_fm)
 	def _pred_fn(_ext, _con, xb):
-	    xb = torch.from_numpy(xb).to(device)
+		xb = torch.from_numpy(xb).to(device)
 		return _model_fn(_ext, _con, xb)
 
 	### Generate the in silico fMRI responses to images ###
