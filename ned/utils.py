@@ -223,7 +223,8 @@ def encode_fmri_nsd_fwrf(encoding_model, images, device):
 		_y, _fm, _h = _ext(_x)
 		return _con(_fm)
 	def _pred_fn(_ext, _con, xb):
-		return _model_fn(_ext, _con, torch.from_numpy(xb).to(device))
+	    xb = torch.from_numpy(xb).to(device)
+		return _model_fn(_ext, _con, xb)
 
 	### Generate the in silico fMRI responses to images ###
 	# Empty in silico fMRI responses variables of shape: (Images x Voxels)
@@ -302,7 +303,6 @@ def get_model_eeg_things_eeg_2_vit_b_32(ned_dir, subject, device):
 
 	### Load the vision transformer ###
 	model = torchvision.models.vit_b_32(weights='DEFAULT')
-	model.eval()
 
 	# Select the used layers for feature extraction
 	model_layers = ['encoder.layers.encoder_layer_0.add_1',
@@ -430,8 +430,9 @@ def encode_eeg_things_eeg_2_vit_b_32(encoding_model, images, device):
 			idx_start = b * batch_size
 			idx_end = idx_start + batch_size
 			# Extract the features
-			features = encoding_model['feature_extractor'](
-				images[idx_start:idx_end].to(device))
+			img_batch = images[idx_start:idx_end]
+			img_batch = img_batch.to(device)
+			features = encoding_model['feature_extractor'](img_batch)
 			# Flatten the features
 			features = torch.hstack([torch.flatten(l, start_dim=1) for l in features.values()])
 			features = features.detach().cpu().numpy()

@@ -10,7 +10,7 @@ with open('README.md', encoding='utf-8') as readmefile:
 
 setup(
     name='NED',
-    version='0.2.1',
+    version='0.2.2',
     description='Neural Encoding Dataset',
     url='https://github.com/gifale95/NED',
     long_description=long_description,
