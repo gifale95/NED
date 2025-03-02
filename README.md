@@ -2,8 +2,6 @@
 
 The `NED` toolbox provides utility functions and tutorials for using the [**Neural Encoding Dataset**][ned_website]: trained encoding models of fMRI and EEG responses to images of multiple subjects, which you can use to generate in silico fMRI and EEG responses to any image of your choice.
 
-The Neural Encoding Dataset also comes with pre-generated in silico fMRI and EEG responses for ~150,000 naturalistic images coming from the [ImageNet 2012 Challenge][imagenet] ([*Russakovsky et al., 2015*][russakovsky]), the [THINGS Database][things] ([*Hebart et al., 2019*][hebart]), and the [Natural Scenes Dataset][nsd] ([*Allen et al., 2022*][allen]), which you can use for research purposes.
-
 For additional information on the Neural Encoding Dataset you can check out the [website][ned_website].
 
 
@@ -172,80 +170,11 @@ insilico_eeg, insilico_eeg_metadata = ned_object.encode(
 	)
 ```
 
-#### 🔹 Load the pre-generated in silico neural responses
 
-The [`load_insilico_neural_responses`][load_insilico_neural_responses] method will load pre-generated in silico fMRI or EEG responses for ~150,000 naturalistic images (either 73,000 images from the Natural Scenes Dataset, 26,107 images from the THINGS Database, or 50,000 images from the ImageNet 2012 Challenge validation split), and optionally return the corresponding metadata.
-
-```python
-"""
-Load NED's pre-generated in silico neural responses, and optionally
-their metadata.
-
-Parameters
-----------
-modality : str
-	Neural data modality.
-train_dataset : str
-	Name of the neural dataset used to train the encoding models.
-model : str
-	Encoding model type used to generate the in silico neural
-	responses.
-imageset : str
-	Imageset for which the in silico neural responses are generated.
-	Available options are 'nsd', 'imagenet_val' and 'things'.
-	If 'nsd', load in silico neural responses for the 73,000 NSD images
-	(Allen et al., 2023).
-	If 'imagenet_val', load in silico neural responses for the 50,000
-	ILSVRC-2012 validation images (Russakovsky et al., 2015).
-	If 'things', load in silico neural responses for the 26,107 images
-	from the THINGS database (Hebart et al., 2019).
-subject : int
-	Subject number for which the in silico neural image responses are
-	generated.
-roi : str
-	Only required if modality=='fmri'. Name of the Region of Interest
-	(ROI) for which the in silico fMRI responses are generated.
-return_metadata : bool
-	If True, additionally return in silico neural responses metadata.
-
-Returns
--------
-insilico_neural_responses : h5py
-	In silico neural responses for the input stimulus images.
-	If modality=='fmri', the neural response will be of shape:
-	(Images x Voxels).
-	If modality=='eeg', the neural response will be of shape:
-	(Images x Repetitions x Channels x Time points) if
-metadata : dict
-	In silico neural responses metadata.
-"""
-
-# Load the pre-generated in silico fMRI responses
-insilico_fmri, insilico_fmri_metadata = ned_object.load_insilico_neural_responses(
-	modality='fmri', # required
-	train_dataset='nsd', # required
-	model='fwrf', # required
-	imageset='things', # required, one of ['nsd', 'things', 'imagenet_val']
-	subject=1, # required
-	roi='V1', # default is None, only required if modality=='fmri'
-	return_metadata=True # default is True
-	)
-
-# Load the pre-generated in silico EEG responses
-insilico_eeg, insilico_eeg_metadata = ned_object.load_insilico_neural_responses(
-	modality='eeg', # required
-	train_dataset='things_eeg_2', # required
-	model='vit_b_32', # required
-	imageset='things', # required, one of ['nsd', 'things', 'imagenet_val']
-	subject=1, # required
-	roi=None, # default is None, only required if modality=='fmri'
-	return_metadata=True # default is True
-	)
-```
 
 ### 💻 Tutorials
 
-To familiarize with the Neural Encoding Dataset we created tutorials for both fMRI and EEG modalities. In these tutorial you will learn how to use `NED`'s functions, for example to generate in silico fMRI and EEG responses for images of your choice, and you will also familiarize with the pre-generated in silico fMRI and EEG responses for ~150,000 naturalistic images.
+To familiarize with the Neural Encoding Dataset we created tutorials for both fMRI and EEG modalities. In these tutorial you will learn how to use `NED`'s functions, for example to generate in silico fMRI and EEG responses for images of your choice.
 
 These tutorials are available on either Google Colab ([fMRI tutorial][fmri_tutorial_colab], [EEG tutorial][eeg_tutorial_colab]) or Jupyter Notebook ([fMRI tutorial][fmri_tutorial_jupyter], [EEG tutorial][eeg_tutorial_jupyter]).
 
@@ -259,7 +188,6 @@ The folder [`../NED/ned_creation_code/`][ned_creation_code] contains the code us
 * **[`../01_train_encoding_models/`][train_encoding]:** train the encoding models, and save their weights.
 * **[`../02_test_encoding_models/`][test_encoding]:** test the encoding models (i.e., compute and plot their encoding accuracy).
 * **[`../03_create_metadata/`][metadata]:** create metadata files relative to the encoding models and their in silico neural responses.
-* **[`../04_synthesize_neural_responses/`][synthesize]:** use the trained encoding models to generate in silico neural responses for ~150,000 naturalistic images.
 
 
 
@@ -273,7 +201,7 @@ If you come across problems with the toolbox, please submit an issue!
 
 If you use the Neural Encoding Dataset, please cite:
 
-> *Gifford AT, Cichy RM. 2024. The Neural Encoding Dataset. In preparation. https://github.com/gifale95/NED*
+> *Gifford AT, Bersch D, Roig G, Cichy RM. 2025. The Neural Encoding Dataset. In preparation. https://github.com/gifale95/NED*
 
 
 [ned_website]: https://www.alegifford.com/projects/ned/
@@ -306,8 +234,4 @@ If you use the Neural Encoding Dataset, please cite:
 [test_encoding]: https://github.com/gifale95/NED/tree/main/ned_creation_code/02_test_encoding_models
 [metadata]: https://github.com/gifale95/NED/tree/main/ned_creation_code/03_create_metadata
 [synthesize]: https://github.com/gifale95/NED/tree/main/ned_creation_code/04_synthesize_neural_responses
-
-
-
-
 
