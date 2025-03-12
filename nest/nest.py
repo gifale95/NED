@@ -288,7 +288,7 @@ class NEST():
 					# Load the feature-weighted receptive field (fwrf) encoding
 					# model (St-Yves & Naselaris, 2018).
 					encoding_model = get_model_fmri_nsd_fwrf(
-						self.ned_dir,
+						self.nest_dir,
 						subject,
 						roi,
 						device
@@ -300,7 +300,7 @@ class NEST():
 					# Load the vision-transformer-based (Dosovitskiy et al.,
 					# 2020) linearizing encoding model.
 					encoding_model = get_model_eeg_things_eeg_2_vit_b_32(
-						self.ned_dir,
+						self.nest_dir,
 						subject,
 						device
 						)
@@ -529,7 +529,7 @@ class NEST():
 				raise ValueError(f"'roi' value must be one of the following: {rois}!")
 
 		### Metadata directories ###
-		parent_dir = os.path.join(self.ned_dir, 'encoding_models',
+		parent_dir = os.path.join(self.nest_dir, 'encoding_models',
 			'modality-'+modality, 'train_dataset-'+train_dataset, 'model-'+
 			model, 'metadata')
 
@@ -642,7 +642,7 @@ class NEST():
 			raise TypeError("'return_metadata' must be of type bool!")
 
 		### In silico neural responses directories ###
-		parent_dir = os.path.join(self.ned_dir,
+		parent_dir = os.path.join(self.nest_dir,
 			'pregenerated_insilico_neural_responses', 'modality-'+modality,
 			'train_dataset-'+train_dataset, 'model-'+ model, 'imageset-'+
 			imageset)
