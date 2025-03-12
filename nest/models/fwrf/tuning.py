@@ -6,10 +6,10 @@ from tqdm import tqdm
 
 import torch
 import torch as T
-from ned.models.fwrf.file_utility import zip_dict
-from ned.models.fwrf.torch_joint_training_unpacked_sequences import *
-from ned.models.fwrf.torch_gnet import Encoder
-from ned.models.fwrf.torch_mpf import Torch_LayerwiseFWRF
+from nest.models.fwrf.file_utility import zip_dict
+from nest.models.fwrf.torch_joint_training_unpacked_sequences import *
+from nest.models.fwrf.torch_gnet import Encoder
+from nest.models.fwrf.torch_mpf import Torch_LayerwiseFWRF
 
 def sample_with_replacement(indices):
     return indices[np.random.randint(len(indices), size=len(indices))]
