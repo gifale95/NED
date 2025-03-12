@@ -176,9 +176,9 @@ insilico_eeg, insilico_eeg_metadata = nest_object.encode(
 
 ### 💻 Tutorials
 
-To familiarize with the Neural Encoding Simulation Toolkit we created tutorials for both fMRI and EEG modalities. In these tutorial you will learn how to use `NEST`'s functions, for example to generate in silico fMRI and EEG responses for images of your choice.
+To familiarize with the Neural Encoding Simulation Toolkit we created tutorials for both fMRI and EEG modalities. In these tutorial you will learn how to use `NEST`'s functions, for example to generate in silico fMRI and EEG responses for images of your choice. These tutorials are available on either Google Colab ([fMRI tutorial][fmri_tutorial_colab], [EEG tutorial][eeg_tutorial_colab]) or Jupyter Notebook ([fMRI tutorial][fmri_tutorial_jupyter], [EEG tutorial][eeg_tutorial_jupyter]).
 
-These tutorials are available on either Google Colab ([fMRI tutorial][fmri_tutorial_colab], [EEG tutorial][eeg_tutorial_colab]) or Jupyter Notebook ([fMRI tutorial][fmri_tutorial_jupyter], [EEG tutorial][eeg_tutorial_jupyter]).
+[Relational Neural Control (RNC)](https://github.com/gifale95/RNC) is an example of performing in silico neuroscience research using NEST. RNC generates and explores in silico functional magnetic resonance imaging (fMRI) responses for large amounts of images, finding controlling images that align or disentangle responses across regions of interest (ROIs) over visual cortex, thus indicating their shared or unique representational content. We created interactive tutorials where you can learn how to use univariate and and multivariate RNC. These tutorials are available on either _Google Colab_ ([univariate RNC][uni_rnc_colab], [multivariate RNC][multi_rnc_colab]) or _Jupyter Notebook_ ([univariate RNC][uni_rnc_jupyter], [multivariate RNC][multi_rnc_jupyter]).
 
 
 
@@ -230,6 +230,10 @@ If you use the Neural Encoding Simulation Toolkit, please cite:
 [eeg_tutorial_colab]: https://colab.research.google.com/drive/10NSRBrJ390vuaPyRWq5fDBIA4NNAUlTk?usp=drive_link
 [fmri_tutorial_jupyter]: https://github.com/gifale95/NEST/blob/main/tutorials/nest_fmri_tutorial.ipynb
 [eeg_tutorial_jupyter]: https://github.com/gifale95/NEST/blob/main/tutorials/nest_eeg_tutorial.ipynb
+[uni_rnc_colab]: https://colab.research.google.com/drive/1QpMSlvKZMLrDNeESdch6AlQ3qKsM1isO?usp=sharing
+[multi_rnc_colab]: https://colab.research.google.com/drive/1bEKCzkjNfM-jzxRj-JX2zxB17XBouw23?usp=sharing
+[uni_rnc_jupyter]: https://github.com/gifale95/RNC/blob/main/tutorials/univariate_rnc_tutorial.ipynb
+[multi_rnc_jupyter]: https://github.com/gifale95/RNC/blob/main/tutorials/multivariate_rnc_tutorial.ipynb
 [nest_creation_code]: https://github.com/gifale95/NEST/tree/main/nest_creation_code/
 [prepare_data]: https://github.com/gifale95/NEST/tree/main/nest_creation_code/00_prepare_data
 [train_encoding]: https://github.com/gifale95/NEST/tree/main/nest_creation_code/01_train_encoding_models
