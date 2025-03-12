@@ -1,1 +1,1 @@
-from ned.ned import NEST
+from nest.nest import NEST
