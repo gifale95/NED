@@ -9,10 +9,10 @@ with open('README.md', encoding='utf-8') as readmefile:
 
 
 setup(
-    name='NED',
-    version='0.2.3',
-    description='Neural Encoding Dataset',
-    url='https://github.com/gifale95/NED',
+    name='NEST',
+    version='0.3.3',
+    description='Neural Encoding Simulation Toolkit',
+    url='https://github.com/gifale95/NEST',
     long_description=long_description,
     long_description_content_type='text/markdown',
     classifiers=[

@@ -11,13 +11,13 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.decomposition import PCA
 from sklearn.linear_model import LinearRegression
 
-from ned.models.fwrf.load_nsd import image_feature_fn
-from ned.models.fwrf.torch_joint_training_unpacked_sequences import *
-from ned.models.fwrf.torch_gnet import Encoder
-from ned.models.fwrf.torch_mpf import Torch_LayerwiseFWRF
+from nest.models.fwrf.load_nsd import image_feature_fn
+from nest.models.fwrf.torch_joint_training_unpacked_sequences import *
+from nest.models.fwrf.torch_gnet import Encoder
+from nest.models.fwrf.torch_mpf import Torch_LayerwiseFWRF
 
 
-def get_model_fmri_nsd_fwrf(ned_dir, subject, roi, device):
+def get_model_fmri_nsd_fwrf(nest_dir, subject, roi, device):
 	"""
 	Load the feature-weighted receptive field (fwrf) encoding model
 	(St-Yves & Naselaris, 2018).
@@ -37,8 +37,8 @@ def get_model_fmri_nsd_fwrf(ned_dir, subject, roi, device):
 
 	Parameters
 	----------
-	ned_dir : str
-		Path to the "neural_encoding_dataset" folder.
+	nest_dir : str
+		Path to the "neural_encoding_simulation_toolkit" folder.
 	subject : int
 		Subject number for which the encoding model was trained.
 	roi : str
@@ -57,14 +57,14 @@ def get_model_fmri_nsd_fwrf(ned_dir, subject, roi, device):
 	### Load the trained encoding model weights ###
 	# Trained model directory
 	if roi in ['lateral', 'ventral']:
-		model_dir_1 = os.path.join(ned_dir, 'encoding_models', 'modality-fmri',
+		model_dir_1 = os.path.join(nest_dir, 'encoding_models', 'modality-fmri',
 			'train_dataset-nsd', 'model-fwrf', 'encoding_models_weights',
 			'weights_'+'sub-'+format(subject,'02')+'_roi-'+roi+'_split-1'+'.pt')
-		model_dir_2 = os.path.join(ned_dir, 'encoding_models', 'modality-fmri',
+		model_dir_2 = os.path.join(nest_dir, 'encoding_models', 'modality-fmri',
 			'train_dataset-nsd', 'model-fwrf', 'encoding_models_weights',
 			'weights_'+'sub-'+format(subject,'02')+'_roi-'+roi+'_split-2'+'.pt')
 	else:
-		model_dir = os.path.join(ned_dir, 'encoding_models', 'modality-fmri',
+		model_dir = os.path.join(nest_dir, 'encoding_models', 'modality-fmri',
 			'train_dataset-nsd', 'model-fwrf', 'encoding_models_weights',
 			'weights_'+'sub-'+format(subject,'02')+'_roi-'+roi+'.pt')
 
@@ -272,15 +272,15 @@ def encode_fmri_nsd_fwrf(encoding_model, images, device):
 	return insilico_fmri_responses
 
 
-def get_model_eeg_things_eeg_2_vit_b_32(ned_dir, subject, device):
+def get_model_eeg_things_eeg_2_vit_b_32(nest_dir, subject, device):
 	"""
 	Load the vision-transformer-based (Dosovitskiy et al., 2020) linearizing
 	encoding model.
 
 	Parameters
 	----------
-	ned_dir : str
-		Path to the "neural_encoding_dataset" folder.
+	nest_dir : str
+		Path to the "neural_encoding_simulation_toolkit" folder.
 	subject : int
 		Subject number for which the encoding model was trained.
 	device : str
@@ -294,7 +294,7 @@ def get_model_eeg_things_eeg_2_vit_b_32(ned_dir, subject, device):
 	"""
 
 	### Get the EEG channels and time points dimensions ###
-	metadata_dir = os.path.join(ned_dir, 'encoding_models', 'modality-eeg',
+	metadata_dir = os.path.join(nest_dir, 'encoding_models', 'modality-eeg',
 		'train_dataset-things_eeg_2', 'model-vit_b_32',
 		'metadata', 'metadata_sub-'+format(subject,'02')+'.npy')
 	metadata = np.load(metadata_dir, allow_pickle=True).item()
@@ -324,7 +324,7 @@ def get_model_eeg_things_eeg_2_vit_b_32(ned_dir, subject, device):
 
 	### Load the scaler and PCA weights ###
 	# Scaler
-	weights_dir = os.path.join(ned_dir, 'encoding_models', 'modality-eeg',
+	weights_dir = os.path.join(nest_dir, 'encoding_models', 'modality-eeg',
 		'train_dataset-things_eeg_2', 'model-vit_b_32',
 		'encoding_models_weights', 'StandardScaler_param.npy')
 	scaler_weights = np.load(weights_dir, allow_pickle=True).item()
@@ -335,7 +335,7 @@ def get_model_eeg_things_eeg_2_vit_b_32(ned_dir, subject, device):
 	scaler.n_features_in_ = scaler_weights['n_features_in_']
 	scaler.n_samples_seen_ = scaler_weights['n_samples_seen_']
 	# PCA
-	weights_dir = os.path.join(ned_dir, 'encoding_models', 'modality-eeg',
+	weights_dir = os.path.join(nest_dir, 'encoding_models', 'modality-eeg',
 		'train_dataset-things_eeg_2', 'model-vit_b_32',
 		'encoding_models_weights', 'pca_param.npy')
 	pca_weights = np.load(weights_dir, allow_pickle=True).item()
@@ -354,7 +354,7 @@ def get_model_eeg_things_eeg_2_vit_b_32(ned_dir, subject, device):
 	transform = torchvision.models.ViT_B_32_Weights.IMAGENET1K_V1.transforms()
 
 	### Load the trained regression weights ###
-	weights_dir = os.path.join(ned_dir, 'encoding_models', 'modality-eeg',
+	weights_dir = os.path.join(nest_dir, 'encoding_models', 'modality-eeg',
 		'train_dataset-things_eeg_2', 'model-vit_b_32',
 		'encoding_models_weights', 'LinearRegression_param_sub-'+
 		format(subject, '02')+'.npy')

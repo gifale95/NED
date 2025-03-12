@@ -3,36 +3,36 @@ import numpy as np
 import h5py
 import torch
 
-from ned.utils import get_model_fmri_nsd_fwrf
-from ned.utils import get_model_eeg_things_eeg_2_vit_b_32
-from ned.utils import encode_fmri_nsd_fwrf
-from ned.utils import encode_eeg_things_eeg_2_vit_b_32
+from nest.utils import get_model_fmri_nsd_fwrf
+from nest.utils import get_model_eeg_things_eeg_2_vit_b_32
+from nest.utils import encode_fmri_nsd_fwrf
+from nest.utils import encode_eeg_things_eeg_2_vit_b_32
 
 
-class NED():
+class NEST():
 
 
-	def __init__(self, ned_dir):
+	def __init__(self, nest_dir):
 		"""
-		Neural Encoding Dataset (NED) object.
+		Neural Encoding Simulation Toolkit (NEST) object.
 
 		Parameters
 		----------
-		ned_dir : str
-			Path to the "neural_encoding_dataset" folder.
+		nest_dir : str
+			Path to the "neural_encoding_simulation_toolkit" folder.
 		"""
 
-		self.ned_dir = ned_dir
+		self.nest_dir = nest_dir
 
 
 	def which_modalities(self):
 		"""
-		Return the neural data modalities available in NED.
+		Return the neural data modalities available in NEST.
 
 		Returns
 		-------
 		modalities : list of str
-			List of neural data modalities available in NED.
+			List of neural data modalities available in NEST.
 		"""
 
 		### List modalities ###
@@ -45,7 +45,7 @@ class NED():
 	def which_train_datasets(self, modality):
 		"""
 		For a given neural data modality, return the available datasets on which
-		the NED encoding models are trained.
+		the NEST encoding models are trained.
 
 		Parameters
 		-------
@@ -55,7 +55,7 @@ class NED():
 		Returns
 		-------
 		train_datasets : list of str
-			List of neural datasets on which the NED encoding models are
+			List of neural datasets on which the NEST encoding models are
 			trained.
 		"""
 
@@ -80,19 +80,19 @@ class NED():
 	def which_models(self, modality, train_dataset):
 		"""
 		For a given neural data modality and training dataset, return the
-		encoding model types available in NED.
+		encoding model types available in NEST.
 
 		Parameters
 		-------
 		modality : str
 			Neural data modality.
 		train_dataset : str
-			Neural dataset on which the NED encoding models are trained.
+			Neural dataset on which the NEST encoding models are trained.
 
 		Returns
 		-------
 		models : list of str
-			List of NED encoding models trained on a given neural data modality
+			List of NEST encoding models trained on a given neural data modality
 			and neural dataset.
 		"""
 
@@ -133,7 +133,7 @@ class NED():
 		modality : str
 			Neural data modality.
 		train_dataset : str
-			Neural dataset on which the NED encoding models are trained.
+			Neural dataset on which the NEST encoding models are trained.
 
 		Returns
 		-------
@@ -177,7 +177,7 @@ class NED():
 		Parameters
 		-------
 		train_dataset : str
-			Neural dataset on which the NED encoding models are trained.
+			Neural dataset on which the NEST encoding models are trained.
 
 		Returns
 		-------
@@ -551,7 +551,7 @@ class NED():
 	def load_insilico_neural_responses(self, modality, train_dataset, model,
 		imageset, subject, roi=None, return_metadata=True):
 		"""
-		Load NED's pre-generated in silico neural responses, and optionally
+		Load NEST's pre-generated in silico neural responses, and optionally
 		their metadata.
 
 		Parameters
@@ -655,7 +655,7 @@ class NED():
 			file_name = 'synthetic_neural_responses_sub-' + \
 				format(subject, '02') +'.h5'
 
-		### Load NED's pre-generated in silico neural responses ###
+		### Load NEST's pre-generated in silico neural responses ###
 		insilico_neural_responses = h5py.File(os.path.join(parent_dir,
 			file_name), 'r').get('synthetic_neural_responses')
 
